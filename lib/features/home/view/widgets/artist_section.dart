@@ -25,7 +25,7 @@ class ArtistSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [
             Text(
-              'Artist',
+              'Stylists',
               style: TextStyle(
                 color: _text,
                 fontSize: 18,
@@ -62,7 +62,8 @@ class ArtistSection extends StatelessWidget {
                   child: StylistCard(
                     image: getStylistImage(index),
                     name: stylist.name,
-                    role: stylist.specialisation
+                    role:
+                        stylist.specialisation
                             .replaceAll('_', ' ')
                             .capitalizeFirst ??
                         '',
