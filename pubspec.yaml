@@ -40,6 +40,7 @@ dependencies:
   flutter_secure_storage: ^10.2.0
   dio: ^5.9.2
   flutter_dotenv: ^6.0.1
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
@@ -66,8 +67,12 @@ flutter:
   assets:
     - assets/salon_logo.png
     - assets/banner.png
+    - assets/banner2.png
     - assets/stylist1.png
     - assets/stylist2.png
+    - assets/stylist3.png
+    - assets/stylist4.png
+    - assets/stylist5.png
     - assets/salon_interior.png
     - assets/cat_haircut.png
     - assets/cat_color.png

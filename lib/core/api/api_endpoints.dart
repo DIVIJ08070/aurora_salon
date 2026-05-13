@@ -9,4 +9,8 @@ class ApiEndpoints {
   static const String services = '/services';
   // static const String salons = '/salons';
   static const String stylists = '/stylists';
+  static const String availableDates = '/time-slots/available-dates';
+  static const String availableSlots = '/time-slots/available';
+  static const String appointments = '/appointments';
+  static const String customers = '/customers';
 }

@@ -27,4 +27,8 @@ class ServiceController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  /// Only returns services that are currently active/available (not soft-deleted)
+  List<ServiceModel> get availableServices =>
+      services.where((s) => s.isAvailable).toList();
 }

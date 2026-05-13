@@ -5,10 +5,10 @@ import '../../../auth/viewmodel/loginvc.dart';
 class ProfileTab extends StatelessWidget {
   final LoginVC loginController;
 
-  static const _card = Color(0xFF2D2D2D);
+  static const _card = Color(0xFF1C1C1C);
   static const _gold = Color(0xFFC5A059);
   static const _text = Colors.white;
-  static const _bg = Color(0xFF1A1A1A);
+  static const _bg = Color(0xFF0D0D0D);
 
   const ProfileTab({super.key, required this.loginController});
 
@@ -26,10 +26,26 @@ class ProfileTab extends StatelessWidget {
               child: Icon(Icons.person, size: 50, color: _gold),
             ),
             const SizedBox(height: 24),
-            Text(
-              loginController.userEmail.value,
-              style: const TextStyle(color: _text, fontSize: 18),
-            ),
+            Obx(() {
+              final user = loginController.user.value;
+              return Column(
+                children: [
+                  Text(
+                    user?.name ?? 'User',
+                    style: const TextStyle(
+                      color: _text,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    user?.email ?? '',
+                    style: const TextStyle(color: Colors.white54, fontSize: 16),
+                  ),
+                ],
+              );
+            }),
             const SizedBox(height: 48),
             ElevatedButton.icon(
               onPressed: loginController.normalLogout,

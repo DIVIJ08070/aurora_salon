@@ -7,8 +7,8 @@ class LoginUI extends StatelessWidget {
   const LoginUI({Key? key}) : super(key: key);
 
   static const _gold = Color(0xFFC5A059);
-  static const _charcoal = Color(0xFF1A1A1A);
-  static const _charcoalLight = Color(0xFF2D2D2D);
+  static const _charcoal = Color(0xFF0D0D0D);
+  static const _charcoalLight = Color(0xFF1C1C1C);
   static const _inputBg = Color(0xFF333333);
   static const _inputBorder = Color(0xFF444444);
 

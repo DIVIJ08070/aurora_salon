@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../view/loginui.dart';
-import '../../home/view/home_screen.dart';
 import '../../theme/theme_controller.dart';
 import '../repository/auth_service.dart';
+import '../model/userdata.dart';
 import '../../../core/storage/storage_service.dart';
+import 'dart:convert';
 import '../../../routes/app_pages.dart';
 
 class LoginVC extends GetxController {
@@ -15,7 +15,7 @@ class LoginVC extends GetxController {
   var isLoading = false.obs;
   var isLoggedIn = false.obs;
   var errorMessage = ''.obs;
-  var userEmail = ''.obs;
+  var user = Rxn<Userdata>();
 
   var email = ''.obs;
   var password = ''.obs;
@@ -77,7 +77,16 @@ class LoginVC extends GetxController {
         debugPrint('CheckLogin: Refresh successful, proceeding to HomeScreen');
         final prefs = await SharedPreferences.getInstance();
         isLoggedIn.value = true;
-        userEmail.value = prefs.getString('userEmail') ?? 'User';
+        
+        final userJson = prefs.getString('userData');
+        if (userJson != null) {
+          try {
+            user.value = Userdata.fromJson(jsonDecode(userJson));
+          } catch (e) {
+            debugPrint('Error restoring user from prefs: $e');
+          }
+        }
+        
         Get.offAllNamed(Routes.HOME);
       } else {
         debugPrint(
@@ -111,10 +120,13 @@ class LoginVC extends GetxController {
       if (result['success']) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
-        await prefs.setString('userEmail', email);
+        
+        if (result['user'] != null) {
+          user.value = result['user'] as Userdata;
+          await prefs.setString('userData', jsonEncode(user.value!.toJson()));
+        }
 
         isLoggedIn.value = true;
-        userEmail.value = email;
         return true;
       } else {
         errorMessage.value = result['message'];
@@ -184,9 +196,9 @@ class LoginVC extends GetxController {
       await _authService.logout();
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', false);
-      await prefs.remove('userEmail');
+      await prefs.remove('userData');
 
-      userEmail.value = '';
+      user.value = null;
       isLoggedIn.value = false;
       Get.offAllNamed(Routes.LOGIN);
     } finally {
@@ -204,7 +216,7 @@ class LoginVC extends GetxController {
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
 
-      userEmail.value = '';
+      user.value = null;
       isLoggedIn.value = false;
 
       Get.find<ThemeController>().resetTheme();

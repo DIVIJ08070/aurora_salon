@@ -2,11 +2,13 @@ import 'package:get/get.dart';
 import '../features/splashscreen/view/splash_screen.dart';
 import '../features/auth/view/loginui.dart';
 import '../features/home/view/home_screen.dart';
+import '../features/booking/view/booking_wizard.dart';
 
 abstract class Routes {
   static const SPLASH = '/splash';
   static const LOGIN = '/login';
   static const HOME = '/home';
+  static const BOOKING = '/booking';
 }
 
 class AppPages {
@@ -23,6 +25,11 @@ class AppPages {
       name: Routes.HOME,
       page: () => const HomeScreen(),
       transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: Routes.BOOKING,
+      page: () => const BookingWizard(),
+      transition: Transition.rightToLeftWithFade,
     ),
   ];
 }

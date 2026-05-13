@@ -3,10 +3,26 @@ import 'package:flutter/foundation.dart';
 import '../../../core/api/api_client.dart';
 import '../../../core/api/api_endpoints.dart';
 import '../../../core/storage/storage_service.dart';
+import '../model/userdata.dart';
 
 class AuthService {
   final ApiClient _apiClient = ApiClient();
   final StorageService _storageService = StorageService();
+
+  Future<Userdata?> fetchProfile(String token) async {
+    try {
+      final response = await _apiClient.get(ApiEndpoints.profile, token: token);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final innerData = data['data'] ?? data;
+        return Userdata.fromJson(innerData);
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Error fetching profile: $e');
+      return null;
+    }
+  }
 
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
@@ -35,7 +51,15 @@ class AuthService {
             refreshToken: refreshToken,
           );
           debugPrint('Tokens saved successfully');
-          return {'success': true, 'data': data};
+          
+          // Fetch full profile since login only returns tokens
+          Userdata? user = await fetchProfile(accessToken);
+          
+          return {
+            'success': true,
+            'data': data,
+            'user': user,
+          };
         } else {
           debugPrint(
             'CRITICAL: Login succeeded but tokens are missing from nested data field!',

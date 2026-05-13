@@ -7,8 +7,7 @@ class StylistCard extends StatelessWidget {
   final String exp;
   final double rating;
 
-  // Theme colors consistent with home
-  static const _card = Color(0xFF2D2D2D);
+  static const _card = Color.fromARGB(255, 12, 12, 12);
   static const _gold = Color(0xFFC5A059);
   static const _text = Colors.white;
   static const _subtext = Colors.white54;
@@ -25,49 +24,95 @@ class StylistCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 140,
-      padding: const EdgeInsets.all(12),
+      width: 160,
+      margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: _card,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.4),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CircleAvatar(radius: 35, backgroundImage: AssetImage(image)),
-          const SizedBox(height: 12),
-          Text(
-            name,
-            style: const TextStyle(
-              color: _text,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
+          const SizedBox(height: 16),
+          // Large Circular Avatar
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: _gold.withOpacity(0.3), width: 1.5),
+              image: DecorationImage(
+                image: AssetImage(image),
+                fit: BoxFit.cover,
+              ),
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 16),
+          // Name - Bold and crisp
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Text(
+              name,
+              style: const TextStyle(
+                color: _text,
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.2,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+            ),
           ),
           const SizedBox(height: 4),
-          Text(role, style: const TextStyle(color: _subtext, fontSize: 12)),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(exp, style: const TextStyle(color: _subtext, fontSize: 11)),
-              Row(
-                children: [
-                  const Icon(Icons.star, color: _gold, size: 12),
-                  const SizedBox(width: 2),
-                  Text(
-                    rating.toString(),
-                    style: const TextStyle(
-                      color: _text,
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                    ),
+          // Role/Specialty - Soft gold
+          Text(
+            role,
+            style: TextStyle(
+              color: _gold.withOpacity(0.85),
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const Spacer(),
+          // Bottom Row: Exp and Rating - Just like the reference
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${exp} exp', // Matches "6 yrs exp"
+                  style: const TextStyle(
+                    color: _subtext,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
-            ],
+                ),
+                Row(
+                  children: [
+                    const Icon(Icons.star_rounded, color: _gold, size: 16),
+                    const SizedBox(width: 2),
+                    Text(
+                      rating.toStringAsFixed(1),
+                      style: const TextStyle(
+                        color: _text,
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),

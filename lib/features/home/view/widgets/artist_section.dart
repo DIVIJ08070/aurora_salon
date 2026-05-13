@@ -37,7 +37,7 @@ class ArtistSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         SizedBox(
-          height: 180,
+        height: 220,
           child: Obx(() {
             if (stylistController.isLoading.value) {
               return const Center(

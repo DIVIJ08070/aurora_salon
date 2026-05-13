@@ -5,7 +5,7 @@ class HomeHeader extends StatelessWidget {
 
   static const _gold = Color(0xFFC5A059);
   static const _subtext = Colors.white54;
-  static const _card = Color(0xFF2D2D2D);
+  static const _card = Color(0xFF1C1C1C);
 
   const HomeHeader({super.key, required this.name});
 
