@@ -7,54 +7,26 @@ import 'steps/stylist_selection_step.dart';
 import 'steps/date_time_selection_step.dart';
 import 'steps/confirmation_step.dart';
 
-class BookingWizard extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../viewmodel/booking_controller.dart';
+import 'steps/customer_selection_step.dart';
+import 'steps/service_selection_step.dart';
+import 'steps/stylist_selection_step.dart';
+import 'steps/date_time_selection_step.dart';
+import 'steps/confirmation_step.dart';
+
+class BookingWizard extends StatelessWidget {
   const BookingWizard({Key? key}) : super(key: key);
-
-  @override
-  State<BookingWizard> createState() => _BookingWizardState();
-}
-
-class _BookingWizardState extends State<BookingWizard> {
-  final BookingController controller = Get.put(BookingController());
-  final PageController _pageController = PageController();
-  int _currentStep = 0;
 
   static const _gold = Color(0xFFC5A059);
   static const _charcoal = Color(0xFF0D0D0D);
   static const _charcoalLight = Color(0xFF1C1C1C);
 
-  void _nextStep() {
-    if (_currentStep < 4) {
-      setState(() {
-        _currentStep++;
-      });
-      _pageController.animateToPage(
-        _currentStep,
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      controller.confirmBooking();
-    }
-  }
-
-  void _prevStep() {
-    if (_currentStep > 0) {
-      setState(() {
-        _currentStep--;
-      });
-      _pageController.animateToPage(
-        _currentStep,
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      Get.back();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(BookingController());
+
     return Scaffold(
       backgroundColor: _charcoal,
       body: Stack(
@@ -73,27 +45,27 @@ class _BookingWizardState extends State<BookingWizard> {
           SafeArea(
             child: Column(
               children: [
-                _buildHeader(),
-                _buildStepIndicator(),
+                _buildHeader(controller),
+                Obx(() => _buildStepIndicator(controller.currentStep.value)),
                 Expanded(
                   child: PageView(
-                    controller: _pageController,
+                    controller: controller.pageController,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      CustomerSelectionStep(onNext: _nextStep),
+                      CustomerSelectionStep(onNext: () => controller.nextStep()),
                       ServiceSelectionStep(
-                        onNext: _nextStep,
-                        onBack: _prevStep,
+                        onNext: () => controller.nextStep(),
+                        onBack: () => controller.prevStep(),
                       ),
                       StylistSelectionStep(
-                        onNext: _nextStep,
-                        onBack: _prevStep,
+                        onNext: () => controller.nextStep(),
+                        onBack: () => controller.prevStep(),
                       ),
                       DateTimeSelectionStep(
-                        onNext: _nextStep,
-                        onBack: _prevStep,
+                        onNext: () => controller.nextStep(),
+                        onBack: () => controller.prevStep(),
                       ),
-                      ConfirmationStep(onBack: _prevStep),
+                      ConfirmationStep(onBack: () => controller.prevStep()),
                     ],
                   ),
                 ),
@@ -105,7 +77,7 @@ class _BookingWizardState extends State<BookingWizard> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BookingController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
@@ -116,7 +88,7 @@ class _BookingWizardState extends State<BookingWizard> {
               color: Colors.white,
               size: 20,
             ),
-            onPressed: _prevStep,
+            onPressed: () => controller.prevStep(),
           ),
           const Expanded(
             child: Text(
@@ -136,12 +108,12 @@ class _BookingWizardState extends State<BookingWizard> {
     );
   }
 
-  Widget _buildStepIndicator() {
+  Widget _buildStepIndicator(int currentStep) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
       child: Row(
         children: List.generate(5, (index) {
-          final isActive = index <= _currentStep;
+          final isActive = index <= currentStep;
           return Expanded(
             child: Row(
               children: [
@@ -181,7 +153,7 @@ class _BookingWizardState extends State<BookingWizard> {
                   Expanded(
                     child: Container(
                       height: 1,
-                      color: index < _currentStep
+                      color: index < currentStep
                           ? _gold
                           : Colors.white.withOpacity(0.1),
                     ),
@@ -194,3 +166,4 @@ class _BookingWizardState extends State<BookingWizard> {
     );
   }
 }
+

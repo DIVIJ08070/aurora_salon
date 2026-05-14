@@ -6,6 +6,7 @@ import '../../auth/viewmodel/loginvc.dart';
 import '../model/booking_model.dart';
 import '../repository/booking_repository.dart';
 import '../model/customer_model.dart';
+import '../model/appointment_model.dart';
 
 class BookingController extends GetxController {
   final BookingRepository _repository = BookingRepository();
@@ -22,6 +23,7 @@ class BookingController extends GetxController {
   var isLoadingStylists = false.obs;
   var isLoadingDates = false.obs;
   var isLoadingSlots = false.obs;
+  var isLoadingStylistAppointments = false.obs;
   var isSubmitting = false.obs;
   
   // Data lists
@@ -29,11 +31,50 @@ class BookingController extends GetxController {
   var filteredStylists = <StylistModel>[].obs;
   var availableDates = <String>[].obs;
   var availableSlots = <TimeSlotModel>[].obs;
+  var allTimeSlots = <TimeSlotModel>[].obs;
+  var stylistAppointments = <AppointmentModel>[].obs;
+
+  // Navigation state
+  var currentStep = 0.obs;
+  late PageController pageController;
 
   @override
   void onInit() {
     super.onInit();
+    pageController = PageController();
     fetchCustomers();
+  }
+
+  @override
+  void onClose() {
+    pageController.dispose();
+    super.onClose();
+  }
+
+  void nextStep() {
+    if (currentStep.value < 4) {
+      currentStep.value++;
+      pageController.animateToPage(
+        currentStep.value,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      confirmBooking();
+    }
+  }
+
+  void prevStep() {
+    if (currentStep.value > 0) {
+      currentStep.value--;
+      pageController.animateToPage(
+        currentStep.value,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      Get.back();
+    }
   }
 
   Future<void> fetchCustomers() async {
@@ -57,7 +98,7 @@ class BookingController extends GetxController {
   bool isSlotInSelectedRange(int currentIndex) {
     if (selectedTimeSlot.value == null) return false;
     
-    final selectedIndex = availableSlots.indexWhere((s) => s.startTime == selectedTimeSlot.value!.startTime);
+    final selectedIndex = allTimeSlots.indexWhere((s) => s.startTime == selectedTimeSlot.value!.startTime);
     if (selectedIndex == -1) return false;
     
     return currentIndex >= selectedIndex && currentIndex < selectedIndex + slotsNeeded;
@@ -104,13 +145,48 @@ class BookingController extends GetxController {
     selectedDate.value = null;
     selectedTimeSlot.value = null;
     availableSlots.clear();
+    stylistAppointments.clear();
     fetchAvailableDates();
+    fetchStylistAppointments();
+  }
+
+  Future<void> fetchStylistAppointments() async {
+    if (selectedStylist.value == null) return;
+    
+    isLoadingStylistAppointments.value = true;
+    try {
+      final appointments = await _repository.fetchAppointments(
+        stylistId: selectedStylist.value!.id,
+      );
+      debugPrint('[BookingController] Fetched ${appointments.length} appointments for stylist ${selectedStylist.value!.id}');
+      stylistAppointments.assignAll(appointments);
+    } catch (e) {
+      debugPrint('[BookingController] Error fetching stylist appointments: $e');
+    } finally {
+      isLoadingStylistAppointments.value = false;
+    }
   }
 
   void selectDate(DateTime date) {
     selectedDate.value = date;
     selectedTimeSlot.value = null;
     fetchAvailableSlots();
+    fetchAllSlots();
+  }
+
+  Future<void> fetchAllSlots() async {
+    if (selectedStylist.value == null || selectedDate.value == null) return;
+    
+    try {
+      final dateStr = "${selectedDate.value!.year}-${selectedDate.value!.month.toString().padLeft(2, '0')}-${selectedDate.value!.day.toString().padLeft(2, '0')}";
+      final slots = await _repository.fetchAllTimeSlots(
+        stylistId: selectedStylist.value!.id,
+        date: dateStr,
+      );
+      allTimeSlots.assignAll(slots);
+    } catch (e) {
+      debugPrint('[BookingController] Error fetching all slots: $e');
+    }
   }
 
   Future<void> fetchAvailableDates() async {

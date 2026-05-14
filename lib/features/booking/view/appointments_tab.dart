@@ -112,6 +112,18 @@ class AppointmentsTab extends StatelessWidget {
                         'No appointments found',
                         style: TextStyle(color: Colors.white.withOpacity(0.2)),
                       ),
+                      const SizedBox(height: 24),
+                      ElevatedButton.icon(
+                        onPressed: () => controller.fetchAppointments(),
+                        icon: const Icon(Icons.refresh, size: 18),
+                        label: const Text('RETRY FETCH'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: _gold.withOpacity(0.1),
+                          foregroundColor: _gold,
+                          side: const BorderSide(color: _gold, width: 0.5),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                      ),
                     ],
                   ),
                 );

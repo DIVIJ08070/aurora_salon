@@ -6,10 +6,10 @@ import '../repository/booking_repository.dart';
 
 class AppointmentController extends GetxController {
   final BookingRepository _repository = BookingRepository();
-  
+
   var appointments = <AppointmentModel>[].obs;
   var isLoading = false.obs;
-  
+
   // Search and Filter state
   var searchText = ''.obs;
   var selectedStatus = 'All'.obs;
@@ -18,32 +18,35 @@ class AppointmentController extends GetxController {
   void onInit() {
     super.onInit();
     fetchAppointments();
-    
+
     // Auto-fetch when search or status changes (with debounce for search)
-    debounce(searchText, (_) => fetchAppointments(), time: const Duration(milliseconds: 500));
+    debounce(
+      searchText,
+      (_) => fetchAppointments(),
+      time: const Duration(milliseconds: 500),
+    );
     ever(selectedStatus, (_) => fetchAppointments());
+
+    // IMPORTANT: This re-fetches appointments as soon as the login is confirmed
+    // or the profile is restored from storage.
+    final LoginVC loginVC = Get.find<LoginVC>();
+    ever(loginVC.user, (_) {
+      debugPrint('[AppointmentController] User profile loaded, re-fetching...');
+      fetchAppointments();
+    });
   }
 
   Future<void> fetchAppointments() async {
     isLoading.value = true;
     try {
-      // Get current user ID from LoginVC
-      final LoginVC loginVC = Get.find<LoginVC>();
-      final userId = loginVC.user.value?.id;
-      
-      if (userId == null) {
-        debugPrint('[AppointmentController] No user logged in, clearing appointments.');
-        appointments.clear();
-        return;
-      }
+      debugPrint('[AppointmentController] Fetching all appointments (no filter)...');
 
       final fetched = await _repository.fetchAppointments(
-        customerId: userId, // Pass the logged in user's ID
         search: searchText.value,
         status: selectedStatus.value,
       );
       
-      debugPrint('[AppointmentController] Fetched ${fetched.length} appointments for user $userId');
+      debugPrint('[AppointmentController] Successfully fetched ${fetched.length} appointments');
       appointments.assignAll(fetched);
     } catch (e) {
       debugPrint('[AppointmentController] Error: $e');

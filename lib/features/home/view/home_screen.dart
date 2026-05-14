@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,66 +6,38 @@ import '../../auth/viewmodel/loginvc.dart';
 import '../../services/viewmodel/service_controller.dart';
 import '../../stylists/viewmodel/stylist_controller.dart';
 import '../../booking/view/appointments_tab.dart';
+import '../viewmodel/home_controller.dart';
 import 'widgets/artist_section.dart';
 import 'widgets/home_header.dart';
 import 'widgets/profile_tab.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
-  String _selectedCategory = 'Haircuts';
-  bool _isPremiumMode = false;
-
-  // Carousel Logic
-  late PageController _pageController;
-  late Timer _timer;
-  int _currentPage = 0;
-  final int _numPages = 2;
 
   static const _bg = Color(0xFF0D0D0D);
   static const _gold = Color(0xFFC5A059);
   static const _text = Colors.white;
 
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
-      if (_currentPage < _numPages - 1) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
-      }
-      if (_pageController.hasClients) {
-        _pageController.animateToPage(
-          _currentPage,
-          duration: const Duration(milliseconds: 800),
-          curve: Curves.easeInOutQuint,
-        );
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    _pageController.dispose();
-    super.dispose();
-  }
-
   String _getStylistImage(int index) {
-    final images = ['assets/stylist1.png', 'assets/stylist2.png', 'assets/stylist3.png', 'assets/stylist4.png', 'assets/stylist5.png'];
+    final images = [
+      'assets/stylist1.png',
+      'assets/stylist2.png',
+      'assets/stylist3.png',
+      'assets/stylist4.png',
+      'assets/stylist5.png'
+    ];
     return images[index % images.length];
   }
 
   String _getRotatingImage(int index) {
-    final images = ['assets/cat_haircut.png', 'assets/cat_color.png', 'assets/cat_nails.png', 'assets/cat_makeup.png', 'assets/cat_skin.png', 'assets/cat_spa.png'];
+    final images = [
+      'assets/cat_haircut.png',
+      'assets/cat_color.png',
+      'assets/cat_nails.png',
+      'assets/cat_makeup.png',
+      'assets/cat_skin.png',
+      'assets/cat_spa.png'
+    ];
     return images[index % images.length];
   }
 
@@ -75,23 +46,32 @@ class _HomeScreenState extends State<HomeScreen> {
     final loginController = Get.find<LoginVC>();
     final serviceController = Get.put(ServiceController());
     final stylistController = Get.put(StylistController());
+    final homeController = Get.put(HomeController());
+
     final user = loginController.user.value;
-    final name = (user?.name != null && user!.name.isNotEmpty) ? user.name : (user?.email.split('@').first.capitalizeFirst ?? 'Guest');
+    final name = (user?.name != null && user!.name.isNotEmpty)
+        ? user.name
+        : (user?.email.split('@').first.capitalizeFirst ?? 'Guest');
 
     return Scaffold(
       backgroundColor: _bg,
       body: SafeArea(
         top: false,
-        child: IndexedStack(
-          index: _currentIndex,
-          children: [
-            _buildHomeDashboard(name, serviceController, stylistController),
-            const AppointmentsTab(),
-            const Center(child: Text('Favorites coming soon', style: TextStyle(color: Colors.white54))),
-            const Center(child: Text('Messages coming soon', style: TextStyle(color: Colors.white54))),
-            ProfileTab(loginController: loginController),
-          ],
-        ),
+        child: Obx(() => IndexedStack(
+              index: homeController.currentIndex.value,
+              children: [
+                _buildHomeDashboard(
+                    name, serviceController, stylistController, homeController),
+                const AppointmentsTab(),
+                const Center(
+                    child: Text('Favorites coming soon',
+                        style: TextStyle(color: Colors.white54))),
+                const Center(
+                    child: Text('Messages coming soon',
+                        style: TextStyle(color: Colors.white54))),
+                ProfileTab(loginController: loginController),
+              ],
+            )),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Get.toNamed(Routes.BOOKING),
@@ -106,25 +86,26 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: _bg,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: _gold,
-        unselectedItemColor: Colors.white38,
-        currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: ''),
-        ],
-      ),
+      bottomNavigationBar: Obx(() => BottomNavigationBar(
+            backgroundColor: _bg,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: _gold,
+            unselectedItemColor: Colors.white38,
+            currentIndex: homeController.currentIndex.value,
+            onTap: (index) => homeController.changeTab(index),
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: ''),
+              BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: ''),
+              BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: ''),
+              BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: ''),
+              BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: ''),
+            ],
+          )),
     );
   }
 
-  Widget _buildHomeDashboard(String name, ServiceController serviceController, StylistController stylistController) {
+  Widget _buildHomeDashboard(String name, ServiceController serviceController,
+      StylistController stylistController, HomeController homeController) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,8 +117,8 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 420,
                 child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (index) => setState(() => _currentPage = index),
+                  controller: homeController.pageController,
+                  onPageChanged: (index) => homeController.onPageChanged(index),
                   children: [
                     _buildHeroBackground('assets/banner.png'),
                     _buildHeroBackground('assets/banner2.png'),
@@ -161,11 +142,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Row(
                                   children: const [
-                                    Text('Arora Luxe', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                                    Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 20),
+                                    Text('Arora Luxe',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold)),
+                                    Icon(Icons.keyboard_arrow_down,
+                                        color: Colors.white, size: 20),
                                   ],
                                 ),
-                                const Text('Bhulka Bhavan, Anand Mahal Rd, Honey...', style: TextStyle(color: Colors.white70, fontSize: 11), overflow: TextOverflow.ellipsis),
+                                const Text(
+                                    'Bhulka Bhavan, Anand Mahal Rd, Honey...',
+                                    style:
+                                        TextStyle(color: Colors.white70, fontSize: 11),
+                                    overflow: TextOverflow.ellipsis),
                               ],
                             ),
                           ),
@@ -212,15 +202,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              // 4. Page Indicator (Moved up slightly for a cleaner look)
+              // 4. Page Indicator
               Positioned(
                 bottom: 20,
                 left: 0,
                 right: 0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(_numPages, (index) => _buildIndicator(index)),
-                ),
+                child: Obx(() => Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                          homeController.numPages,
+                          (index) =>
+                              _buildIndicator(index, homeController.currentPage.value)),
+                    )),
               ),
             ],
           ),
@@ -231,11 +224,15 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Services', style: TextStyle(color: _text, fontSize: 18, fontWeight: FontWeight.bold)),
+                const Text('Services',
+                    style: TextStyle(
+                        color: _text, fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 16),
-                _buildServiceList(serviceController),
+                _buildServiceList(serviceController, homeController),
                 const SizedBox(height: 32),
-                ArtistSection(stylistController: stylistController, getStylistImage: _getStylistImage),
+                ArtistSection(
+                    stylistController: stylistController,
+                    getStylistImage: _getStylistImage),
                 const SizedBox(height: 32),
                 _buildNearbySalons(),
               ],
@@ -256,7 +253,11 @@ class _HomeScreenState extends State<HomeScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.black.withOpacity(0.6), Colors.transparent, Colors.black.withOpacity(0.8)],
+            colors: [
+              Colors.black.withOpacity(0.6),
+              Colors.transparent,
+              Colors.black.withOpacity(0.8)
+            ],
           ),
         ),
       ),
@@ -266,129 +267,86 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildZomatoSearchBar() {
     return Container(
       height: 50,
-      decoration: BoxDecoration(color: const Color(0xFF1C1C1C), borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+          color: const Color(0xFF1C1C1C), borderRadius: BorderRadius.circular(12)),
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Row(
         children: const [
           Icon(Icons.search, color: _gold, size: 22),
           SizedBox(width: 10),
-          Expanded(child: Text('Search "Haircuts"', style: TextStyle(color: Colors.white38, fontSize: 14))),
+          Expanded(
+              child: Text('Search "Haircuts"',
+                  style: TextStyle(color: Colors.white38, fontSize: 14))),
           Icon(Icons.mic_none_rounded, color: Colors.white54, size: 22),
         ],
       ),
     );
   }
 
-  Widget _buildBannerContent() {
-    final isPageOne = _currentPage == 0;
-    return Column(
-      children: [
-        Text(
-          isPageOne ? 'ELITE GROOMING' : 'AURORA LUXE',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.w900,
-            fontStyle: FontStyle.italic,
-            letterSpacing: 1,
-          ),
-        ),
-        Text(
-          isPageOne ? '20% OFF' : 'FREE FACIAL',
-          style: const TextStyle(
-            color: _gold,
-            fontSize: 48,
-            fontWeight: FontWeight.w900,
-            fontStyle: FontStyle.italic,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          isPageOne ? 'HAIRCUT & BEARD COMBO' : 'GOLD INFUSED TREATMENT',
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1,
-          ),
-        ),
-        const SizedBox(height: 24),
-        ElevatedButton(
-          onPressed: () => Get.toNamed(Routes.BOOKING),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              Text(
-                'BOOK NOW',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(width: 4),
-              Icon(Icons.arrow_forward_ios, size: 12, color: Colors.black),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildIndicator(int index) {
+  Widget _buildIndicator(int index, int currentPage) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       margin: const EdgeInsets.symmetric(horizontal: 4),
-      width: _currentPage == index ? 16 : 8,
+      width: currentPage == index ? 16 : 8,
       height: 4,
-      decoration: BoxDecoration(color: _currentPage == index ? Colors.white : Colors.white24, borderRadius: BorderRadius.circular(2)),
+      decoration: BoxDecoration(
+          color: currentPage == index ? Colors.white : Colors.white24,
+          borderRadius: BorderRadius.circular(2)),
     );
   }
 
   Widget _buildCircleIcon(IconData icon) {
     return Container(
       padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), shape: BoxShape.circle),
+      decoration:
+          BoxDecoration(color: Colors.white.withOpacity(0.1), shape: BoxShape.circle),
       child: Icon(icon, color: Colors.white, size: 20),
     );
   }
 
   Widget _buildProfilePic() {
     return Container(
-      decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.white24, width: 2)),
-      child: const CircleAvatar(radius: 18, backgroundImage: AssetImage('assets/stylist1.png')),
+      decoration: BoxDecoration(
+          shape: BoxShape.circle, border: Border.all(color: Colors.white24, width: 2)),
+      child: const CircleAvatar(
+          radius: 18, backgroundImage: AssetImage('assets/stylist1.png')),
     );
   }
 
-  Widget _buildServiceList(ServiceController controller) {
+  Widget _buildServiceList(
+      ServiceController serviceController, HomeController homeController) {
     return SizedBox(
       height: 110,
       child: Obx(() {
-        if (controller.isLoading.value) return const Center(child: CircularProgressIndicator(color: _gold));
+        if (serviceController.isLoading.value) {
+          return const Center(child: CircularProgressIndicator(color: _gold));
+        }
         return ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: controller.services.length,
+          itemCount: serviceController.services.length,
           itemBuilder: (context, index) {
-            final service = controller.services[index];
-            final isSelected = service.name == _selectedCategory;
+            final service = serviceController.services[index];
+            final isSelected = service.name == homeController.selectedCategory.value;
             return GestureDetector(
-              onTap: () => setState(() => _selectedCategory = service.name),
+              onTap: () => homeController.selectCategory(service.name),
               child: Container(
                 width: 140,
                 margin: const EdgeInsets.only(right: 12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: isSelected ? _gold : Colors.transparent, width: 2),
-                  image: DecorationImage(image: AssetImage(_getRotatingImage(index)), fit: BoxFit.cover, opacity: isSelected ? 0.8 : 0.4),
+                  border: Border.all(
+                      color: isSelected ? _gold : Colors.transparent, width: 2),
+                  image: DecorationImage(
+                      image: AssetImage(_getRotatingImage(index)),
+                      fit: BoxFit.cover,
+                      opacity: isSelected ? 0.8 : 0.4),
                 ),
                 child: Center(
-                  child: Text(service.name.toUpperCase(), style: TextStyle(color: isSelected ? Colors.white : Colors.white60, fontWeight: FontWeight.bold, fontSize: 12)),
+                  child: Text(service.name.toUpperCase(),
+                      style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.white60,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12)),
                 ),
               ),
             );
@@ -405,7 +363,8 @@ class _HomeScreenState extends State<HomeScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [
-            Text('Nearby Salons', style: TextStyle(color: _text, fontSize: 18, fontWeight: FontWeight.bold)),
+            Text('Nearby Salons',
+                style: TextStyle(color: _text, fontSize: 18, fontWeight: FontWeight.bold)),
             Text('See all', style: TextStyle(color: _gold, fontSize: 14)),
           ],
         ),
@@ -413,22 +372,33 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           height: 200,
           width: double.infinity,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), image: const DecorationImage(image: AssetImage('assets/salon_interior.png'), fit: BoxFit.cover)),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              image: const DecorationImage(
+                  image: AssetImage('assets/salon_interior.png'), fit: BoxFit.cover)),
           child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [Colors.black.withOpacity(0.9), Colors.transparent])),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [Colors.black.withOpacity(0.9), Colors.transparent])),
             padding: const EdgeInsets.all(20),
             alignment: Alignment.bottomLeft,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('The Gilded Blade', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                const Text('The Gilded Blade',
+                    style: TextStyle(
+                        color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 4),
                 Row(
                   children: const [
                     Icon(Icons.location_on, color: _gold, size: 14),
                     SizedBox(width: 4),
-                    Text('1.2 km away', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                    Text('1.2 km away',
+                        style: TextStyle(color: Colors.white70, fontSize: 12)),
                   ],
                 ),
               ],
@@ -439,3 +409,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+

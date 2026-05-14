@@ -1,53 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../auth/viewmodel/loginvc.dart';
+import '../viewmodel/splash_controller.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _fadeAnimation;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    );
-
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
-
-    _scaleAnimation = Tween<double>(
-      begin: 0.8,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
-
-    _controller.forward();
-
+  Widget build(BuildContext context) {
     if (!Get.isRegistered<LoginVC>()) {
       Get.put(LoginVC(), permanent: true);
     }
-  }
+    
+    final controller = Get.put(SplashController());
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -60,9 +26,9 @@ class _SplashScreenState extends State<SplashScreen>
           ),
         ),
         child: FadeTransition(
-          opacity: _fadeAnimation,
+          opacity: controller.fadeAnimation,
           child: ScaleTransition(
-            scale: _scaleAnimation,
+            scale: controller.scaleAnimation,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -129,3 +95,4 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 }
+

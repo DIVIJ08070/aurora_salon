@@ -35,7 +35,7 @@ class AppointmentModel {
     return AppointmentModel(
       id: int.tryParse(json['id']?.toString() ?? '0') ?? 0,
       appointmentNumber: json['appointment_number'] as String? ?? json['appointmentNumber'] as String? ?? '',
-      date: json['appointment_date'] as String? ?? json['appointmentDate'] as String? ?? '',
+      date: (json['appointment_date'] as String? ?? json['appointmentDate'] as String? ?? '').split('T')[0],
       startTime: json['start_time'] as String? ?? json['startTime'] as String? ?? '',
       endTime: json['end_time'] as String? ?? json['endTime'] as String? ?? '',
       totalAmount: double.tryParse(json['total_amount']?.toString() ?? json['totalAmount']?.toString() ?? '0') ?? 0.0,

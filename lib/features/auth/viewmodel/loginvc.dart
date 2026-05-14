@@ -82,6 +82,7 @@ class LoginVC extends GetxController {
         if (userJson != null) {
           try {
             user.value = Userdata.fromJson(jsonDecode(userJson));
+            debugPrint('SUCCESS: LoginVC - Profile Restored for: ${user.value?.email} (ID: ${user.value?.id})');
           } catch (e) {
             debugPrint('Error restoring user from prefs: $e');
           }
@@ -123,6 +124,7 @@ class LoginVC extends GetxController {
         
         if (result['user'] != null) {
           user.value = result['user'] as Userdata;
+          debugPrint('SUCCESS: LoginVC - User set to: ${user.value?.email} (ID: ${user.value?.id})');
           await prefs.setString('userData', jsonEncode(user.value!.toJson()));
         }
 

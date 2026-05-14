@@ -136,6 +136,41 @@ class BookingRepository {
     }
   }
 
+  Future<List<TimeSlotModel>> fetchAllTimeSlots({
+    required int stylistId,
+    required String date,
+  }) async {
+    try {
+      final token = await _storageService.getAccessToken();
+      final endpoint = '/time-slots?stylistId=$stylistId&date=$date&limit=100';
+      
+      final response = await _apiClient.get(endpoint, token: token);
+      
+      if (response.statusCode == 200) {
+        final decodedBody = jsonDecode(response.body);
+        final dynamic globalData = decodedBody['data'];
+        
+        List list;
+        if (globalData is Map && globalData.containsKey('data')) {
+          // Handles { data: { data: [...], meta: ... } }
+          list = globalData['data'] as List;
+        } else if (globalData is List) {
+          // Handles { data: [...] }
+          list = globalData;
+        } else {
+          list = [];
+        }
+        
+        debugPrint('[BookingRepository] Fetched ${list.length} total slots for stylist $stylistId on $date');
+        return list.map((e) => TimeSlotModel.fromJson(e)).toList();
+      }
+      return [];
+    } catch (e) {
+      debugPrint('Error fetching all time slots: $e');
+      return [];
+    }
+  }
+
   Future<bool> createBooking(BookingRequest request) async {
     try {
       final token = await _storageService.getAccessToken();
@@ -154,6 +189,7 @@ class BookingRepository {
 
   Future<List<AppointmentModel>> fetchAppointments({
     int? customerId,
+    int? stylistId,
     String? search,
     String? status,
   }) async {
@@ -162,7 +198,9 @@ class BookingRepository {
       
       // Build query parameters
       Map<String, String> queryParams = {};
+      // customerId and stylistId are now optional filters
       if (customerId != null) queryParams['customerId'] = customerId.toString();
+      if (stylistId != null) queryParams['stylistId'] = stylistId.toString();
       if (search != null && search.isNotEmpty) queryParams['search'] = search;
       if (status != null && status.isNotEmpty && status != 'All') queryParams['status'] = status.toLowerCase();
       
@@ -171,7 +209,8 @@ class BookingRepository {
           
       debugPrint('Fetching Appointments from: $url');
       final response = await _apiClient.get(url, token: token);
-      debugPrint('Appointments Response (${response.statusCode}): ${response.body}');
+      debugPrint('[BookingRepository] Status: ${response.statusCode}');
+      debugPrint('[BookingRepository] Raw Body: ${response.body}');
       
       if (response.statusCode == 200) {
         final decodedBody = jsonDecode(response.body);

@@ -29,14 +29,21 @@ class TimeSlotModel {
   final int id;
   final String startTime;
   final String endTime;
+  final String status;
   
-  TimeSlotModel({required this.id, required this.startTime, required this.endTime});
+  TimeSlotModel({
+    required this.id, 
+    required this.startTime, 
+    required this.endTime,
+    this.status = 'available',
+  });
 
   factory TimeSlotModel.fromJson(Map<String, dynamic> json) {
     return TimeSlotModel(
       id: json['id'] as int? ?? 0,
       startTime: json['start_time'] as String? ?? '',
       endTime: json['end_time'] as String? ?? '',
+      status: json['slot_status'] as String? ?? 'available',
     );
   }
 }

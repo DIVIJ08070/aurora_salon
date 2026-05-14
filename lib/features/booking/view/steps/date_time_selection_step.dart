@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../viewmodel/booking_controller.dart';
+import '../../model/appointment_model.dart';
 
 class DateTimeSelectionStep extends StatelessWidget {
   final VoidCallback onNext;
@@ -110,6 +111,19 @@ class DateTimeSelectionStep extends StatelessWidget {
               );
             }
 
+            if (controller.allTimeSlots.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.event_busy, size: 48, color: Colors.white.withOpacity(0.05)),
+                    const SizedBox(height: 16),
+                    const Text('No slots generated for this day', style: TextStyle(color: Colors.white24)),
+                  ],
+                ),
+              );
+            }
+
             return GridView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -118,25 +132,44 @@ class DateTimeSelectionStep extends StatelessWidget {
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 12,
               ),
-              itemCount: controller.availableSlots.length,
+              itemCount: controller.allTimeSlots.length,
               itemBuilder: (context, index) {
-                final slot = controller.availableSlots[index];
+                final slot = controller.allTimeSlots[index];
+                final isBooked = slot.status == 'booked';
+                final isBookable = controller.availableSlots.any((s) => s.startTime == slot.startTime);
                 
                 return Obx(() {
-                  // Use the smart selection logic inside Obx for instant updates
                   final isSelected = controller.isSlotInSelectedRange(index);
                   final isStart = controller.selectedTimeSlot.value?.startTime == slot.startTime;
                   
+                  // Color logic
+                  Color bgColor = _card;
+                  Color textColor = Colors.white;
+                  Color borderColor = Colors.white.withOpacity(0.05);
+                  
+                  if (isBooked) {
+                    bgColor = Colors.green.withOpacity(0.2);
+                    textColor = Colors.greenAccent;
+                    borderColor = Colors.green.withOpacity(0.3);
+                  } else if (isSelected) {
+                    bgColor = _gold;
+                    textColor = Colors.black;
+                    borderColor = _gold;
+                  } else if (!isBookable) {
+                    bgColor = _card.withOpacity(0.5);
+                    textColor = Colors.white24;
+                  }
+
                   return GestureDetector(
-                    onTap: () => controller.selectedTimeSlot.value = slot,
+                    onTap: (isBooked || !isBookable) ? null : () => controller.selectedTimeSlot.value = slot,
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 250),
                       curve: Curves.easeOutCubic,
                       decoration: BoxDecoration(
-                        color: isSelected ? _gold : _card,
+                        color: bgColor,
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
-                          color: isSelected ? _gold : Colors.white.withOpacity(0.05),
+                          color: borderColor,
                           width: isSelected ? 2.5 : 1,
                         ),
                         boxShadow: isSelected ? [
@@ -154,11 +187,17 @@ class DateTimeSelectionStep extends StatelessWidget {
                             Text(
                               slot.startTime.substring(0, 5),
                               style: TextStyle(
-                                color: isSelected ? Colors.black : Colors.white,
+                                color: textColor,
                                 fontSize: 14,
-                                fontWeight: isSelected ? FontWeight.w900 : FontWeight.w500,
+                                fontWeight: (isSelected || isBooked) ? FontWeight.w900 : FontWeight.w500,
+                                decoration: isBooked ? TextDecoration.lineThrough : null,
                               ),
                             ),
+                            if (isBooked)
+                              const Text(
+                                'BOOKED',
+                                style: TextStyle(color: Colors.greenAccent, fontSize: 8, fontWeight: FontWeight.bold),
+                              ),
                             if (isStart && controller.slotsNeeded > 1)
                               Text(
                                 'START',
