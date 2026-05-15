@@ -8,10 +8,10 @@ class ServiceSelectionStep extends StatelessWidget {
   final VoidCallback onBack;
 
   const ServiceSelectionStep({
-    Key? key,
+    super.key,
     required this.onNext,
     required this.onBack,
-  }) : super(key: key);
+  });
 
   static const _gold = Color(0xFFC5A059);
   static const _card = Color(0xFF1C1C1C);
@@ -90,13 +90,13 @@ class ServiceSelectionStep extends StatelessWidget {
                         border: Border.all(
                           color: isSelected
                               ? _gold
-                              : Colors.white.withOpacity(0.05),
+                              : Colors.white.withValues(alpha: 0.05),
                           width: isSelected ? 2 : 1,
                         ),
                         boxShadow: isSelected
                             ? [
                                 BoxShadow(
-                                  color: _gold.withOpacity(0.2),
+                                  color: _gold.withValues(alpha: 0.2),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 ),
@@ -123,7 +123,7 @@ class ServiceSelectionStep extends StatelessWidget {
                                     end: Alignment.bottomCenter,
                                     colors: [
                                       Colors.transparent,
-                                      Colors.black.withOpacity(0.8),
+                                      Colors.black.withValues(alpha: 0.8),
                                     ],
                                   ),
                                 ),
@@ -154,7 +154,7 @@ class ServiceSelectionStep extends StatelessWidget {
                                       Text(
                                         '${service.durationMinutes}m',
                                         style: TextStyle(
-                                          color: Colors.white.withOpacity(0.6),
+                                          color: Colors.white.withValues(alpha: 0.6),
                                           fontSize: 11,
                                         ),
                                       ),
@@ -212,7 +212,7 @@ class ServiceSelectionStep extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, -5),
           ),
@@ -268,7 +268,7 @@ class ServiceSelectionStep extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    disabledBackgroundColor: Colors.white.withOpacity(0.1),
+                    disabledBackgroundColor: Colors.white.withValues(alpha: 0.1),
                   ),
                   child: const Text(
                     'CONTINUE',

@@ -109,7 +109,7 @@ class BookingController extends GetxController {
 
       filteredStylists.assignAll(stylists);
     } catch (e) {
-
+      debugPrint('Error fetching filtered stylists: $e');
     } finally {
       isLoadingStylists.value = false;
     }
@@ -152,7 +152,7 @@ class BookingController extends GetxController {
 
       stylistAppointments.assignAll(appointments);
     } catch (e) {
-
+      debugPrint('Error fetching stylist appointments: $e');
     } finally {
       isLoadingStylistAppointments.value = false;
     }
@@ -176,7 +176,7 @@ class BookingController extends GetxController {
       );
       allTimeSlots.assignAll(slots);
     } catch (e) {
-
+      debugPrint('Error fetching all slots: $e');
     }
   }
 

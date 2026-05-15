@@ -7,10 +7,10 @@ class StylistSelectionStep extends StatelessWidget {
   final VoidCallback onBack;
 
   const StylistSelectionStep({
-    Key? key,
+    super.key,
     required this.onNext,
     required this.onBack,
-  }) : super(key: key);
+  });
 
   static const _gold = Color(0xFFC5A059);
   static const _card = Color(0xFF1C1C1C);
@@ -65,7 +65,7 @@ class StylistSelectionStep extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.person_off_outlined, size: 64, color: Colors.white.withOpacity(0.05)),
+                    Icon(Icons.person_off_outlined, size: 64, color: Colors.white.withValues(alpha: 0.05)),
                     const SizedBox(height: 16),
                     const Text(
                       'No stylists available',
@@ -97,11 +97,11 @@ class StylistSelectionStep extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(
-                          color: isSelected ? _gold : Colors.white.withOpacity(0.05),
+                          color: isSelected ? _gold : Colors.white.withValues(alpha: 0.05),
                           width: isSelected ? 2 : 1,
                         ),
                         boxShadow: isSelected ? [
-                          BoxShadow(color: _gold.withOpacity(0.2), blurRadius: 10, offset: const Offset(0, 4))
+                          BoxShadow(color: _gold.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
                         ] : [],
                       ),
                       child: ClipRRect(
@@ -123,7 +123,7 @@ class StylistSelectionStep extends StatelessWidget {
                                     end: Alignment.bottomCenter,
                                     colors: [
                                       Colors.transparent,
-                                      Colors.black.withOpacity(0.9),
+                                      Colors.black.withValues(alpha: 0.9),
                                     ],
                                   ),
                                 ),
@@ -148,7 +148,7 @@ class StylistSelectionStep extends StatelessWidget {
                                   Text(
                                     stylist.specialisation,
                                     style: TextStyle(
-                                      color: _gold.withOpacity(0.8),
+                                      color: _gold.withValues(alpha: 0.8),
                                       fontSize: 10,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -218,7 +218,7 @@ class StylistSelectionStep extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-                disabledBackgroundColor: Colors.white.withOpacity(0.1),
+                disabledBackgroundColor: Colors.white.withValues(alpha: 0.1),
               ),
               child: const Text(
                 'CONTINUE',

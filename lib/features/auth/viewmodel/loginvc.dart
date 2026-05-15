@@ -55,7 +55,7 @@ class LoginVC extends GetxController {
     if (success) {
       emailController.clear();
       passwordController.clear();
-      Get.offAllNamed(Routes.HOME);
+      Get.offAllNamed(Routes.home);
     }
   }
 
@@ -66,7 +66,7 @@ class LoginVC extends GetxController {
       if (!hasTokens) {
 
         isLoggedIn.value = false;
-        Get.offAllNamed(Routes.LOGIN);
+        Get.offAllNamed(Routes.login);
         return;
       }
 
@@ -83,21 +83,21 @@ class LoginVC extends GetxController {
             user.value = Userdata.fromJson(jsonDecode(userJson));
 
           } catch (e) {
-
+            debugPrint('Error parsing user data: $e');
           }
         }
 
-        Get.offAllNamed(Routes.HOME);
+        Get.offAllNamed(Routes.home);
       } else {
 
         await _storageService.clearTokens();
         isLoggedIn.value = false;
-        Get.offAllNamed(Routes.LOGIN);
+        Get.offAllNamed(Routes.login);
       }
     } catch (e) {
 
       errorMessage.value = e.toString();
-      Get.offAllNamed(Routes.LOGIN);
+      Get.offAllNamed(Routes.login);
     } finally {
 
     }
@@ -133,7 +133,7 @@ class LoginVC extends GetxController {
           'Login Error',
           errorMessage.value,
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red.withOpacity(0.8),
+          backgroundColor: Colors.red.withValues(alpha: 0.8),
           colorText: Colors.white,
         );
         return false;
@@ -199,7 +199,7 @@ class LoginVC extends GetxController {
 
       user.value = null;
       isLoggedIn.value = false;
-      Get.offAllNamed(Routes.LOGIN);
+      Get.offAllNamed(Routes.login);
     } finally {
       isLoading.value = false;
     }
@@ -219,7 +219,7 @@ class LoginVC extends GetxController {
       isLoggedIn.value = false;
 
       Get.find<ThemeController>().resetTheme();
-      Get.offAllNamed(Routes.LOGIN);
+      Get.offAllNamed(Routes.login);
     } finally {
       isLoading.value = false;
     }

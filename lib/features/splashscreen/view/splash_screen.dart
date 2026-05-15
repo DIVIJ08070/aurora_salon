@@ -4,7 +4,7 @@ import '../../auth/viewmodel/loginvc.dart';
 import '../viewmodel/splash_controller.dart';
 
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class SplashScreen extends StatelessWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFC5A059).withOpacity(0.2),
+                        color: const Color(0xFFC5A059).withValues(alpha: 0.2),
                         blurRadius: 40,
                         spreadRadius: 10,
                       ),

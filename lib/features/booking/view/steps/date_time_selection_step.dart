@@ -8,10 +8,10 @@ class DateTimeSelectionStep extends StatelessWidget {
   final VoidCallback onBack;
 
   const DateTimeSelectionStep({
-    Key? key,
+    super.key,
     required this.onNext,
     required this.onBack,
-  }) : super(key: key);
+  });
 
   static const _gold = Color(0xFFC5A059);
   static const _card = Color(0xFF1C1C1C);
@@ -39,9 +39,9 @@ class DateTimeSelectionStep extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: _gold.withOpacity(0.1),
+                  color: _gold.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: _gold.withOpacity(0.2)),
+                  border: Border.all(color: _gold.withValues(alpha: 0.2)),
                 ),
                 child: Obx(() => Text(
                   '${controller.totalDuration} MINS',
@@ -101,7 +101,7 @@ class DateTimeSelectionStep extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.event_busy, size: 48, color: Colors.white.withOpacity(0.05)),
+                    Icon(Icons.event_busy, size: 48, color: Colors.white.withValues(alpha: 0.05)),
                     const SizedBox(height: 16),
                     const Text('No slots available', style: TextStyle(color: Colors.white24)),
                   ],
@@ -114,7 +114,7 @@ class DateTimeSelectionStep extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.event_busy, size: 48, color: Colors.white.withOpacity(0.05)),
+                    Icon(Icons.event_busy, size: 48, color: Colors.white.withValues(alpha: 0.05)),
                     const SizedBox(height: 16),
                     const Text('No slots generated for this day', style: TextStyle(color: Colors.white24)),
                   ],
@@ -142,18 +142,18 @@ class DateTimeSelectionStep extends StatelessWidget {
 
                   Color bgColor = _card;
                   Color textColor = Colors.white;
-                  Color borderColor = Colors.white.withOpacity(0.05);
+                  Color borderColor = Colors.white.withValues(alpha: 0.05);
 
                   if (isBooked) {
-                    bgColor = Colors.green.withOpacity(0.2);
+                    bgColor = Colors.green.withValues(alpha: 0.2);
                     textColor = Colors.greenAccent;
-                    borderColor = Colors.green.withOpacity(0.3);
+                    borderColor = Colors.green.withValues(alpha: 0.3);
                   } else if (isSelected) {
                     bgColor = _gold;
                     textColor = Colors.black;
                     borderColor = _gold;
                   } else if (!isBookable) {
-                    bgColor = _card.withOpacity(0.5);
+                    bgColor = _card.withValues(alpha: 0.5);
                     textColor = Colors.white24;
                   }
 
@@ -171,7 +171,7 @@ class DateTimeSelectionStep extends StatelessWidget {
                         ),
                         boxShadow: isSelected ? [
                           BoxShadow(
-                            color: _gold.withOpacity(0.3),
+                            color: _gold.withValues(alpha: 0.3),
                             blurRadius: 12,
                             spreadRadius: 1,
                           )
@@ -199,7 +199,7 @@ class DateTimeSelectionStep extends StatelessWidget {
                               Text(
                                 'START',
                                 style: TextStyle(
-                                  color: Colors.black.withOpacity(0.5),
+                                  color: Colors.black.withValues(alpha: 0.5),
                                   fontSize: 8,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: 0.5,
@@ -240,12 +240,12 @@ class DateTimeSelectionStep extends StatelessWidget {
             color: isSelected ? _gold : _card,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: isSelected ? _gold : Colors.white.withOpacity(0.08),
+              color: isSelected ? _gold : Colors.white.withValues(alpha: 0.08),
               width: isSelected ? 2.5 : 1,
             ),
             boxShadow: isSelected ? [
               BoxShadow(
-                color: _gold.withOpacity(0.4),
+                color: _gold.withValues(alpha: 0.4),
                 blurRadius: 15,
                 spreadRadius: 2,
                 offset: const Offset(0, 4),
@@ -258,7 +258,7 @@ class DateTimeSelectionStep extends StatelessWidget {
               Text(
                 DateFormat('MMM').format(date).toUpperCase(),
                 style: TextStyle(
-                  color: isSelected ? Colors.black.withOpacity(0.7) : Colors.white38,
+                  color: isSelected ? Colors.black.withValues(alpha: 0.7) : Colors.white38,
                   fontSize: 10,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 0.5,
@@ -277,7 +277,7 @@ class DateTimeSelectionStep extends StatelessWidget {
               Text(
                 DateFormat('EEE').format(date).toUpperCase(),
                 style: TextStyle(
-                  color: isSelected ? Colors.black.withOpacity(0.7) : _gold.withOpacity(0.5),
+                  color: isSelected ? Colors.black.withValues(alpha: 0.7) : _gold.withValues(alpha: 0.5),
                   fontSize: 10,
                   fontWeight: FontWeight.w900,
                 ),
@@ -321,7 +321,7 @@ class DateTimeSelectionStep extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18),
                 ),
-                disabledBackgroundColor: Colors.white.withOpacity(0.05),
+                disabledBackgroundColor: Colors.white.withValues(alpha: 0.05),
               ),
               child: const Text(
                 'CONTINUE',

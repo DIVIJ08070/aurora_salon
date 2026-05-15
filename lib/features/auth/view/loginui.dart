@@ -4,7 +4,7 @@ import '../viewmodel/loginvc.dart';
 import '../../theme/theme_controller.dart';
 
 class LoginUI extends StatelessWidget {
-  const LoginUI({Key? key}) : super(key: key);
+  const LoginUI({super.key});
 
   static const _gold = Color(0xFFC5A059);
   static const _charcoal = Color(0xFF0D0D0D);
@@ -43,7 +43,7 @@ class LoginUI extends StatelessWidget {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: _gold.withOpacity(0.15),
+                          color: _gold.withValues(alpha: 0.15),
                           blurRadius: 30,
                           spreadRadius: 5,
                         ),
@@ -138,10 +138,10 @@ class LoginUI extends StatelessWidget {
                   cursorColor: _gold,
                   decoration: InputDecoration(
                     hintText: 'Enter your email',
-                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.25)),
+                    hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.25)),
                     prefixIcon: Icon(
                       Icons.email_outlined,
-                      color: _gold.withOpacity(0.6),
+                      color: _gold.withValues(alpha: 0.6),
                       size: 20,
                     ),
                     border: OutlineInputBorder(
@@ -198,10 +198,10 @@ class LoginUI extends StatelessWidget {
                   cursorColor: _gold,
                   decoration: InputDecoration(
                     hintText: 'Enter your password',
-                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.25)),
+                    hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.25)),
                     prefixIcon: Icon(
                       Icons.lock_outline,
-                      color: _gold.withOpacity(0.6),
+                      color: _gold.withValues(alpha: 0.6),
                       size: 20,
                     ),
                     border: OutlineInputBorder(
@@ -246,9 +246,9 @@ class LoginUI extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 16),
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFE57373).withOpacity(0.1),
+                        color: const Color(0xFFE57373).withValues(alpha: 0.1),
                         border: Border.all(
-                          color: const Color(0xFFE57373).withOpacity(0.3),
+                          color: const Color(0xFFE57373).withValues(alpha: 0.3),
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -291,7 +291,7 @@ class LoginUI extends StatelessWidget {
                       boxShadow: enabled
                           ? [
                               BoxShadow(
-                                color: _gold.withOpacity(0.3),
+                                color: _gold.withValues(alpha: 0.3),
                                 blurRadius: 12,
                                 offset: const Offset(0, 4),
                               ),
@@ -328,7 +328,7 @@ class LoginUI extends StatelessWidget {
                                 letterSpacing: 3,
                                 color: enabled
                                     ? _charcoal
-                                    : Colors.white.withOpacity(0.3),
+                                    : Colors.white.withValues(alpha: 0.3),
                               ),
                             ),
                     ),
@@ -346,7 +346,7 @@ class LoginUI extends StatelessWidget {
                       child: Text(
                         'AURORA SALON & SPA',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.15),
+                          color: Colors.white.withValues(alpha: 0.15),
                           fontSize: 10,
                           letterSpacing: 3,
                         ),

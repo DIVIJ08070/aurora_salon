@@ -8,7 +8,7 @@ import 'steps/date_time_selection_step.dart';
 import 'steps/confirmation_step.dart';
 
 class BookingWizard extends StatelessWidget {
-  const BookingWizard({Key? key}) : super(key: key);
+  const BookingWizard({super.key});
 
   static const _gold = Color(0xFFC5A059);
   static const _charcoal = Color(0xFF0D0D0D);
@@ -113,14 +113,14 @@ class BookingWizard extends StatelessWidget {
                   height: 24,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isActive ? _gold : Colors.white.withOpacity(0.1),
+                    color: isActive ? _gold : Colors.white.withValues(alpha: 0.1),
                     border: Border.all(
-                      color: isActive ? _gold : Colors.white.withOpacity(0.2),
+                      color: isActive ? _gold : Colors.white.withValues(alpha: 0.2),
                     ),
                     boxShadow: isActive
                         ? [
                             BoxShadow(
-                              color: _gold.withOpacity(0.3),
+                              color: _gold.withValues(alpha: 0.3),
                               blurRadius: 8,
                               spreadRadius: 1,
                             ),
@@ -133,7 +133,7 @@ class BookingWizard extends StatelessWidget {
                       style: TextStyle(
                         color: isActive
                             ? _charcoal
-                            : Colors.white.withOpacity(0.5),
+                            : Colors.white.withValues(alpha: 0.5),
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
@@ -146,7 +146,7 @@ class BookingWizard extends StatelessWidget {
                       height: 1,
                       color: index < currentStep
                           ? _gold
-                          : Colors.white.withOpacity(0.1),
+                          : Colors.white.withValues(alpha: 0.1),
                     ),
                   ),
               ],

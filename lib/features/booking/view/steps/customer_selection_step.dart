@@ -5,8 +5,7 @@ import '../../viewmodel/booking_controller.dart';
 class CustomerSelectionStep extends StatelessWidget {
   final VoidCallback onNext;
 
-  const CustomerSelectionStep({Key? key, required this.onNext})
-    : super(key: key);
+  const CustomerSelectionStep({super.key, required this.onNext});
 
   static const _gold = Color(0xFFC5A059);
   static const _card = Color(0xFF1C1C1C);
@@ -90,12 +89,12 @@ class CustomerSelectionStep extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 12),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: isSelected ? _gold.withOpacity(0.1) : _card,
+                        color: isSelected ? _gold.withValues(alpha: 0.1) : _card,
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: isSelected
                               ? _gold
-                              : Colors.white.withOpacity(0.05),
+                              : Colors.white.withValues(alpha: 0.05),
                           width: 1.5,
                         ),
                       ),
@@ -103,7 +102,7 @@ class CustomerSelectionStep extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 24,
-                            backgroundColor: _gold.withOpacity(0.2),
+                            backgroundColor: _gold.withValues(alpha: 0.2),
                             child: Text(
                               customer.name.isNotEmpty
                                   ? customer.name.substring(0, 1).toUpperCase()
@@ -130,7 +129,7 @@ class CustomerSelectionStep extends StatelessWidget {
                                 Text(
                                   customer.email ?? '',
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.4),
+                                    color: Colors.white.withValues(alpha: 0.4),
                                     fontSize: 12,
                                   ),
                                 ),
@@ -166,7 +165,7 @@ class CustomerSelectionStep extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            disabledBackgroundColor: Colors.white.withOpacity(0.1),
+            disabledBackgroundColor: Colors.white.withValues(alpha: 0.1),
           ),
           child: const Text(
             'CONTINUE',

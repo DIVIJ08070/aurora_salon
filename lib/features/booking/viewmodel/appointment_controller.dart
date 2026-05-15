@@ -43,7 +43,7 @@ class AppointmentController extends GetxController {
 
       appointments.assignAll(fetched);
     } catch (e) {
-
+      debugPrint('Error fetching appointments: $e');
     } finally {
       isLoading.value = false;
     }

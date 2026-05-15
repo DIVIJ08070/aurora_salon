@@ -31,7 +31,7 @@ class StylistCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.4),
+            color: Colors.black.withValues(alpha: 0.4),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -47,7 +47,7 @@ class StylistCard extends StatelessWidget {
             height: 80,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: _gold.withOpacity(0.3), width: 1.5),
+              border: Border.all(color: _gold.withValues(alpha: 0.3), width: 1.5),
               image: DecorationImage(
                 image: AssetImage(image),
                 fit: BoxFit.cover,
@@ -76,7 +76,7 @@ class StylistCard extends StatelessWidget {
           Text(
             role,
             style: TextStyle(
-              color: _gold.withOpacity(0.85),
+              color: _gold.withValues(alpha: 0.85),
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
@@ -90,7 +90,7 @@ class StylistCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${exp} exp',
+                  '$exp exp',
                   style: const TextStyle(
                     color: _subtext,
                     fontSize: 11,

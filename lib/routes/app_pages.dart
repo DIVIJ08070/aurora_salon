@@ -5,29 +5,29 @@ import '../features/home/view/home_screen.dart';
 import '../features/booking/view/booking_wizard.dart';
 
 abstract class Routes {
-  static const SPLASH = '/splash';
-  static const LOGIN = '/login';
-  static const HOME = '/home';
-  static const BOOKING = '/booking';
+  static const splash = '/splash';
+  static const login = '/login';
+  static const home = '/home';
+  static const booking = '/booking';
 }
 
 class AppPages {
-  static const INITIAL = Routes.SPLASH;
+  static const initial = Routes.splash;
 
   static final routes = [
-    GetPage(name: Routes.SPLASH, page: () => const SplashScreen()),
+    GetPage(name: Routes.splash, page: () => const SplashScreen()),
     GetPage(
-      name: Routes.LOGIN,
+      name: Routes.login,
       page: () => const LoginUI(),
       transition: Transition.fadeIn,
     ),
     GetPage(
-      name: Routes.HOME,
+      name: Routes.home,
       page: () => const HomeScreen(),
       transition: Transition.cupertino,
     ),
     GetPage(
-      name: Routes.BOOKING,
+      name: Routes.booking,
       page: () => const BookingWizard(),
       transition: Transition.rightToLeftWithFade,
     ),

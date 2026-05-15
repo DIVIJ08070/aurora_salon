@@ -6,7 +6,7 @@ import '../../viewmodel/booking_controller.dart';
 class ConfirmationStep extends StatelessWidget {
   final VoidCallback onBack;
 
-  const ConfirmationStep({Key? key, required this.onBack}) : super(key: key);
+  const ConfirmationStep({super.key, required this.onBack});
 
   static const _gold = Color(0xFFC5A059);
 
@@ -59,7 +59,7 @@ class ConfirmationStep extends StatelessWidget {
                       Text('\$${service.price.toStringAsFixed(2)}', style: const TextStyle(color: Colors.white)),
                     ],
                   ),
-                )).toList(),
+                )),
                 const Divider(color: Colors.white10, height: 40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -88,9 +88,9 @@ class ConfirmationStep extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: _gold.withOpacity(0.1),
+        color: _gold.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: _gold.withOpacity(0.3)),
+        border: Border.all(color: _gold.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [

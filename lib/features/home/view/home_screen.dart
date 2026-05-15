@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../routes/app_pages.dart';
@@ -73,7 +72,7 @@ class HomeScreen extends StatelessWidget {
             )),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Get.toNamed(Routes.BOOKING),
+        onPressed: () => Get.toNamed(Routes.booking),
         backgroundColor: _gold,
         icon: const Icon(Icons.add_task_rounded, color: Colors.black),
         label: const Text(
@@ -260,9 +259,9 @@ class HomeScreen extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.black.withOpacity(0.6),
+              Colors.black.withValues(alpha: 0.6),
               Colors.transparent,
-              Colors.black.withOpacity(0.8)
+              Colors.black.withValues(alpha: 0.8)
             ],
           ),
         ),
@@ -305,7 +304,7 @@ class HomeScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration:
-          BoxDecoration(color: Colors.white.withOpacity(0.1), shape: BoxShape.circle),
+          BoxDecoration(color: Colors.white.withValues(alpha: 0.1), shape: BoxShape.circle),
       child: Icon(icon, color: Colors.white, size: 20),
     );
   }
@@ -388,7 +387,7 @@ class HomeScreen extends StatelessWidget {
                 gradient: LinearGradient(
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
-                    colors: [Colors.black.withOpacity(0.9), Colors.transparent])),
+                    colors: [Colors.black.withValues(alpha: 0.9), Colors.transparent])),
             padding: const EdgeInsets.all(20),
             alignment: Alignment.bottomLeft,
             child: Column(

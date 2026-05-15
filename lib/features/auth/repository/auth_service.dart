@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import '../../../core/api/api_client.dart';
 import '../../../core/api/api_endpoints.dart';
 import '../../../core/storage/storage_service.dart';
@@ -80,7 +80,7 @@ class AuthService {
 
       if (accessToken != null && refreshToken != null) {
 
-        final response = await _apiClient.post(ApiEndpoints.logout, {
+        await _apiClient.post(ApiEndpoints.logout, {
           'accessToken': accessToken,
           'refreshToken': refreshToken,
         });
@@ -89,7 +89,7 @@ class AuthService {
 
       }
     } catch (e) {
-
+      debugPrint('Logout error: $e');
     } finally {
       await _storageService.clearTokens();
 
