@@ -28,7 +28,6 @@ class ServiceController extends GetxController {
     }
   }
 
-  /// Only returns services that are currently active/available (not soft-deleted)
   List<ServiceModel> get availableServices =>
       services.where((s) => s.isAvailable).toList();
 }

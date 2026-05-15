@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../stylists/viewmodel/stylist_controller.dart';
 import '../../viewmodel/booking_controller.dart';
 
 class StylistSelectionStep extends StatelessWidget {
@@ -60,7 +59,7 @@ class StylistSelectionStep extends StatelessWidget {
             if (bookingController.isLoadingStylists.value) {
               return const Center(child: CircularProgressIndicator(color: _gold));
             }
-            
+
             if (bookingController.filteredStylists.isEmpty) {
               return Center(
                 child: Column(
@@ -88,7 +87,7 @@ class StylistSelectionStep extends StatelessWidget {
               itemCount: bookingController.filteredStylists.length,
               itemBuilder: (context, index) {
                 final stylist = bookingController.filteredStylists[index];
-                
+
                 return Obx(() {
                   final isSelected = bookingController.selectedStylist.value?.id == stylist.id;
                   return GestureDetector(
@@ -109,13 +108,13 @@ class StylistSelectionStep extends StatelessWidget {
                         borderRadius: BorderRadius.circular(22),
                         child: Stack(
                           children: [
-                            // Artist Image
+
                             Positioned.fill(
                               child: stylist.imageUrl != null && stylist.imageUrl!.startsWith('http')
                                 ? Image.network(stylist.imageUrl!, fit: BoxFit.cover)
                                 : Image.asset(_getStylistFallback(index), fit: BoxFit.cover),
                             ),
-                            // Gradient Overlay
+
                             Positioned.fill(
                               child: Container(
                                 decoration: BoxDecoration(
@@ -130,7 +129,7 @@ class StylistSelectionStep extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            // Info
+
                             Padding(
                               padding: const EdgeInsets.all(12.0),
                               child: Column(

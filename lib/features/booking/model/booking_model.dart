@@ -1,8 +1,8 @@
 class BookingRequest {
   final int customerId;
   final int stylistId;
-  final String appointmentDate; // format: YYYY-MM-DD
-  final String startTime; // format: HH:MM:SS
+  final String appointmentDate;
+  final String startTime;
   final List<int> serviceIds;
   final String? notes;
 
@@ -30,10 +30,10 @@ class TimeSlotModel {
   final String startTime;
   final String endTime;
   final String status;
-  
+
   TimeSlotModel({
-    required this.id, 
-    required this.startTime, 
+    required this.id,
+    required this.startTime,
     required this.endTime,
     this.status = 'available',
   });

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../services/viewmodel/service_controller.dart';
-import '../../../services/model/service_model.dart';
 import '../../viewmodel/booking_controller.dart';
 
 class ServiceSelectionStep extends StatelessWidget {
@@ -108,14 +107,14 @@ class ServiceSelectionStep extends StatelessWidget {
                         borderRadius: BorderRadius.circular(22),
                         child: Stack(
                           children: [
-                            // Full Image Background
+
                             Positioned.fill(
                               child: Image.asset(
                                 _getServiceImage(index),
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            // Gradient Overlay for text readability
+
                             Positioned.fill(
                               child: Container(
                                 decoration: BoxDecoration(
@@ -130,7 +129,7 @@ class ServiceSelectionStep extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            // Content
+
                             Padding(
                               padding: const EdgeInsets.all(12.0),
                               child: Column(
@@ -172,7 +171,7 @@ class ServiceSelectionStep extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            // Selection Indicator
+
                             if (isSelected)
                               Positioned(
                                 top: 8,

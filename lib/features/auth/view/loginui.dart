@@ -35,7 +35,6 @@ class LoginUI extends StatelessWidget {
               children: [
                 const SizedBox(height: 40),
 
-                // Logo & Branding
                 Center(
                   child: Container(
                     width: 150,
@@ -77,7 +76,6 @@ class LoginUI extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
 
-                // Welcome Text
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -122,7 +120,6 @@ class LoginUI extends StatelessWidget {
                 ),
                 const SizedBox(height: 36),
 
-                // Email Field
                 const Text(
                   'EMAIL ADDRESS',
                   style: TextStyle(
@@ -168,7 +165,6 @@ class LoginUI extends StatelessWidget {
                   ),
                 ),
 
-                // Email Error
                 Obx(() {
                   final msg = loginController.emailError.value;
                   if (msg.isEmpty) return const SizedBox(height: 20);
@@ -184,7 +180,6 @@ class LoginUI extends StatelessWidget {
                   );
                 }),
 
-                // Password Field
                 const Text(
                   'PASSWORD',
                   style: TextStyle(
@@ -230,7 +225,6 @@ class LoginUI extends StatelessWidget {
                   ),
                 ),
 
-                // Password Error
                 Obx(() {
                   final msg = loginController.passwordError.value;
                   if (msg.isEmpty) return const SizedBox(height: 20);
@@ -246,7 +240,6 @@ class LoginUI extends StatelessWidget {
                   );
                 }),
 
-                // API Error
                 Obx(() {
                   if (loginController.errorMessage.value.isNotEmpty) {
                     return Container(
@@ -283,7 +276,6 @@ class LoginUI extends StatelessWidget {
                   return const SizedBox.shrink();
                 }),
 
-                // Sign In Button
                 Obx(() {
                   final enabled = loginController.isFormValid.value &&
                       !loginController.isLoading.value;
@@ -344,7 +336,6 @@ class LoginUI extends StatelessWidget {
                 }),
                 const SizedBox(height: 32),
 
-                // Bottom divider
                 Row(
                   children: [
                     Expanded(

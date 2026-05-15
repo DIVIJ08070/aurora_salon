@@ -12,8 +12,7 @@ class ServiceRepository {
   Future<List<ServiceModel>> fetchServices({String? category}) async {
     try {
       final token = await _storageService.getAccessToken();
-      
-      // Construct endpoint with query parameter if category exists
+
       String endpoint = ApiEndpoints.services;
       if (category != null) {
         endpoint += '?category=$category';
@@ -24,22 +23,17 @@ class ServiceRepository {
         token: token,
       );
 
-      debugPrint('FetchServices Status: ${response.statusCode}');
-      debugPrint('FetchServices Body: ${response.body}');
-
       if (response.statusCode == 200) {
         final decodedBody = jsonDecode(response.body);
         final globalData = decodedBody['data'];
-        
-        // Sometimes the backend might return just a flat array in `data`
-        // So we should check the structure:
+
         List servicesList;
         if (globalData is Map && globalData.containsKey('data')) {
            servicesList = globalData['data'] as List;
         } else if (globalData is List) {
            servicesList = globalData;
         } else {
-           debugPrint('Unexpected data format: $globalData');
+
            return [];
         }
 
@@ -50,7 +44,7 @@ class ServiceRepository {
         throw Exception('Server returned status code: ${response.statusCode}\nBody: ${response.body}');
       }
     } catch (e) {
-      debugPrint('Unexpected error fetching services: $e');
+
       rethrow;
     }
   }

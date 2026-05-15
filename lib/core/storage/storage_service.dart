@@ -12,10 +12,10 @@ class StorageService {
   static const _refreshTokenKey = 'refresh_token';
 
   Future<void> saveTokens({required String accessToken, required String refreshToken}) async {
-    debugPrint('StorageService: Saving tokens to secure storage...');
+
     await _storage.write(key: _accessTokenKey, value: accessToken);
     await _storage.write(key: _refreshTokenKey, value: refreshToken);
-    debugPrint('StorageService: Tokens written successfully');
+
   }
 
   Future<String?> getAccessToken() async {
@@ -27,17 +27,17 @@ class StorageService {
   }
 
   Future<void> clearTokens() async {
-    debugPrint('StorageService: Clearing tokens from secure storage...');
+
     await _storage.delete(key: _accessTokenKey);
     await _storage.delete(key: _refreshTokenKey);
-    debugPrint('StorageService: Tokens deleted');
+
   }
 
   Future<bool> hasTokens() async {
     final access = await getAccessToken();
     final refresh = await getRefreshToken();
     final present = access != null && refresh != null;
-    debugPrint('StorageService: Checking tokens presence: $present');
+
     return present;
   }
 }

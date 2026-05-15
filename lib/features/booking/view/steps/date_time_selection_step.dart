@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../viewmodel/booking_controller.dart';
-import '../../model/appointment_model.dart';
 
 class DateTimeSelectionStep extends StatelessWidget {
   final VoidCallback onNext;
@@ -53,8 +52,7 @@ class DateTimeSelectionStep extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        
-        // Horizontal Date Picker
+
         SizedBox(
           height: 100,
           child: ListView.builder(
@@ -67,7 +65,7 @@ class DateTimeSelectionStep extends StatelessWidget {
             },
           ),
         ),
-        
+
         const SizedBox(height: 32),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 24),
@@ -82,13 +80,13 @@ class DateTimeSelectionStep extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        
+
         Expanded(
           child: Obx(() {
             if (controller.isLoadingSlots.value) {
               return const Center(child: CircularProgressIndicator(color: _gold));
             }
-            
+
             if (controller.selectedDate.value == null) {
               return const Center(
                 child: Text(
@@ -97,7 +95,7 @@ class DateTimeSelectionStep extends StatelessWidget {
                 ),
               );
             }
-            
+
             if (controller.availableSlots.isEmpty) {
               return Center(
                 child: Column(
@@ -137,16 +135,15 @@ class DateTimeSelectionStep extends StatelessWidget {
                 final slot = controller.allTimeSlots[index];
                 final isBooked = slot.status == 'booked';
                 final isBookable = controller.availableSlots.any((s) => s.startTime == slot.startTime);
-                
+
                 return Obx(() {
                   final isSelected = controller.isSlotInSelectedRange(index);
                   final isStart = controller.selectedTimeSlot.value?.startTime == slot.startTime;
-                  
-                  // Color logic
+
                   Color bgColor = _card;
                   Color textColor = Colors.white;
                   Color borderColor = Colors.white.withOpacity(0.05);
-                  
+
                   if (isBooked) {
                     bgColor = Colors.green.withOpacity(0.2);
                     textColor = Colors.greenAccent;
@@ -174,7 +171,7 @@ class DateTimeSelectionStep extends StatelessWidget {
                         ),
                         boxShadow: isSelected ? [
                           BoxShadow(
-                            color: _gold.withOpacity(0.3), 
+                            color: _gold.withOpacity(0.3),
                             blurRadius: 12,
                             spreadRadius: 1,
                           )
@@ -218,7 +215,7 @@ class DateTimeSelectionStep extends StatelessWidget {
             );
           }),
         ),
-        
+
         _buildBottomBar(),
       ],
     );
@@ -226,13 +223,13 @@ class DateTimeSelectionStep extends StatelessWidget {
 
   Widget _buildDateItem(DateTime date, BookingController controller) {
     return Obx(() {
-      // Normalize dates for accurate comparison (ignoring time)
+
       final selected = controller.selectedDate.value;
-      final isSelected = selected != null && 
+      final isSelected = selected != null &&
           selected.year == date.year &&
           selected.month == date.month &&
           selected.day == date.day;
-      
+
       return GestureDetector(
         onTap: () => controller.selectDate(date),
         child: AnimatedContainer(

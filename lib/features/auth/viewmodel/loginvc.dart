@@ -61,48 +61,45 @@ class LoginVC extends GetxController {
 
   Future<void> checkLogin() async {
     try {
-      debugPrint('--- CheckLogin Started ---');
+
       final hasTokens = await _storageService.hasTokens();
       if (!hasTokens) {
-        debugPrint('CheckLogin: No tokens found, redirecting to LoginUI');
+
         isLoggedIn.value = false;
         Get.offAllNamed(Routes.LOGIN);
         return;
       }
 
-      debugPrint('CheckLogin: Tokens found, attempting to refresh...');
       final refreshSuccess = await _authService.refreshTokens();
 
       if (refreshSuccess) {
-        debugPrint('CheckLogin: Refresh successful, proceeding to HomeScreen');
+
         final prefs = await SharedPreferences.getInstance();
         isLoggedIn.value = true;
-        
+
         final userJson = prefs.getString('userData');
         if (userJson != null) {
           try {
             user.value = Userdata.fromJson(jsonDecode(userJson));
-            debugPrint('SUCCESS: LoginVC - Profile Restored for: ${user.value?.email} (ID: ${user.value?.id})');
+
           } catch (e) {
-            debugPrint('Error restoring user from prefs: $e');
+
           }
         }
-        
+
         Get.offAllNamed(Routes.HOME);
       } else {
-        debugPrint(
-          'CheckLogin: Refresh failed, clearing tokens and redirecting to LoginUI',
-        );
+
         await _storageService.clearTokens();
         isLoggedIn.value = false;
         Get.offAllNamed(Routes.LOGIN);
       }
     } catch (e) {
-      debugPrint('CheckLogin: Error occurred: $e');
+
       errorMessage.value = e.toString();
       Get.offAllNamed(Routes.LOGIN);
     } finally {
-      debugPrint('--- CheckLogin Finished ---');
+
     }
   }
 
@@ -121,10 +118,10 @@ class LoginVC extends GetxController {
       if (result['success']) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
-        
+
         if (result['user'] != null) {
           user.value = result['user'] as Userdata;
-          debugPrint('SUCCESS: LoginVC - User set to: ${user.value?.email} (ID: ${user.value?.id})');
+
           await prefs.setString('userData', jsonEncode(user.value!.toJson()));
         }
 
@@ -194,7 +191,7 @@ class LoginVC extends GetxController {
     if (isLoading.value) return;
     isLoading.value = true;
     try {
-      debugPrint('LoginVC: Initiating Normal Logout');
+
       await _authService.logout();
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', false);
@@ -212,7 +209,7 @@ class LoginVC extends GetxController {
     if (isLoading.value) return;
     isLoading.value = true;
     try {
-      debugPrint('LoginVC: Initiating Hard Logout');
+
       await _authService.logout();
       await _storageService.clearTokens();
       final prefs = await SharedPreferences.getInstance();

@@ -5,7 +5,7 @@ class AppointmentModel {
   final String startTime;
   final String endTime;
   final double totalAmount;
-  final String status; // 'scheduled', 'completed', 'cancelled', 'no_show'
+  final String status;
   final String stylistName;
   final String customerName;
   final String? notes;
@@ -24,7 +24,7 @@ class AppointmentModel {
   });
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json) {
-    // Robust parsing for names (handles both flat and nested structures)
+
     String getNestedName(dynamic obj, String key, String fallback) {
       if (obj == null) return fallback;
       if (obj is String) return obj;

@@ -16,7 +16,7 @@ class BookingRepository {
     try {
       final token = await _storageService.getAccessToken();
       final response = await _apiClient.get(ApiEndpoints.customers, token: token);
-      
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final List<dynamic> customers = data is List ? data : (data['data'] ?? []);
@@ -24,7 +24,7 @@ class BookingRepository {
       }
       return [];
     } catch (e) {
-      debugPrint('Error fetching customers: $e');
+
       return [];
     }
   }
@@ -32,18 +32,16 @@ class BookingRepository {
   Future<List<StylistModel>> fetchFilteredStylists(List<int> serviceIds) async {
     try {
       final token = await _storageService.getAccessToken();
-      // Construct query string: ?serviceIds=1&serviceIds=5
+
       String query = serviceIds.map((id) => 'serviceIds=$id').join('&');
       final url = '${ApiEndpoints.stylists}?$query';
-      
-      debugPrint('Fetching Filtered Stylists from: $url');
+
       final response = await _apiClient.get(url, token: token);
-      debugPrint('Filtered Stylists Response (${response.statusCode}): ${response.body}');
-      
+
       if (response.statusCode == 200) {
         final decodedBody = jsonDecode(response.body);
         final globalData = decodedBody['data'];
-        
+
         List list;
         if (globalData is Map && globalData.containsKey('data')) {
            list = globalData['data'] as List;
@@ -57,7 +55,7 @@ class BookingRepository {
       }
       return [];
     } catch (e) {
-      debugPrint('Error fetching stylists: $e');
+
       return [];
     }
   }
@@ -66,7 +64,6 @@ class BookingRepository {
     try {
       final token = await _storageService.getAccessToken();
       final response = await _apiClient.get(ApiEndpoints.stylists, token: token);
-      debugPrint('FetchAllStylists Response (${response.statusCode}): ${response.body}');
 
       if (response.statusCode == 200) {
         final decodedBody = jsonDecode(response.body);
@@ -84,7 +81,7 @@ class BookingRepository {
       }
       return [];
     } catch (e) {
-      debugPrint('Error fetching all stylists: $e');
+
       return [];
     }
   }
@@ -98,9 +95,9 @@ class BookingRepository {
     try {
       final token = await _storageService.getAccessToken();
       final endpoint = '${ApiEndpoints.availableDates}?stylistId=$stylistId&durationMinutes=$durationMinutes&month=$month&year=$year';
-      
+
       final response = await _apiClient.get(endpoint, token: token);
-      
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final List<dynamic> dates = data['data'] ?? [];
@@ -108,7 +105,7 @@ class BookingRepository {
       }
       return [];
     } catch (e) {
-      debugPrint('Error fetching available dates: $e');
+
       return [];
     }
   }
@@ -121,9 +118,9 @@ class BookingRepository {
     try {
       final token = await _storageService.getAccessToken();
       final endpoint = '${ApiEndpoints.availableSlots}?stylistId=$stylistId&date=$date&durationMinutes=$durationMinutes';
-      
+
       final response = await _apiClient.get(endpoint, token: token);
-      
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final List<dynamic> slots = data['data'] ?? [];
@@ -131,7 +128,7 @@ class BookingRepository {
       }
       return [];
     } catch (e) {
-      debugPrint('Error fetching available slots: $e');
+
       return [];
     }
   }
@@ -143,30 +140,29 @@ class BookingRepository {
     try {
       final token = await _storageService.getAccessToken();
       final endpoint = '/time-slots?stylistId=$stylistId&date=$date&limit=100';
-      
+
       final response = await _apiClient.get(endpoint, token: token);
-      
+
       if (response.statusCode == 200) {
         final decodedBody = jsonDecode(response.body);
         final dynamic globalData = decodedBody['data'];
-        
+
         List list;
         if (globalData is Map && globalData.containsKey('data')) {
-          // Handles { data: { data: [...], meta: ... } }
+
           list = globalData['data'] as List;
         } else if (globalData is List) {
-          // Handles { data: [...] }
+
           list = globalData;
         } else {
           list = [];
         }
-        
-        debugPrint('[BookingRepository] Fetched ${list.length} total slots for stylist $stylistId on $date');
+
         return list.map((e) => TimeSlotModel.fromJson(e)).toList();
       }
       return [];
     } catch (e) {
-      debugPrint('Error fetching all time slots: $e');
+
       return [];
     }
   }
@@ -179,10 +175,10 @@ class BookingRepository {
         request.toJson(),
         token: token,
       );
-      
+
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
-      debugPrint('Error creating booking: $e');
+
       return false;
     }
   }
@@ -195,28 +191,24 @@ class BookingRepository {
   }) async {
     try {
       final token = await _storageService.getAccessToken();
-      
-      // Build query parameters
+
       Map<String, String> queryParams = {};
-      // customerId and stylistId are now optional filters
+
       if (customerId != null) queryParams['customerId'] = customerId.toString();
       if (stylistId != null) queryParams['stylistId'] = stylistId.toString();
       if (search != null && search.isNotEmpty) queryParams['search'] = search;
       if (status != null && status.isNotEmpty && status != 'All') queryParams['status'] = status.toLowerCase();
-      
+
       String queryString = queryParams.entries.map((e) => '${e.key}=${e.value}').join('&');
       final url = queryString.isNotEmpty ? '${ApiEndpoints.appointments}?$queryString' : ApiEndpoints.appointments;
-          
-      debugPrint('Fetching Appointments from: $url');
+
       final response = await _apiClient.get(url, token: token);
-      debugPrint('[BookingRepository] Status: ${response.statusCode}');
-      debugPrint('[BookingRepository] Raw Body: ${response.body}');
-      
+
       if (response.statusCode == 200) {
         final decodedBody = jsonDecode(response.body);
-        // Handle standard nested 'data' field
+
         final dynamic globalData = decodedBody['data'];
-        
+
         List list;
         if (globalData is Map && globalData.containsKey('data')) {
            list = globalData['data'] as List;
@@ -230,7 +222,7 @@ class BookingRepository {
       }
       return [];
     } catch (e) {
-      debugPrint('Error fetching appointments: $e');
+
       return [];
     }
   }

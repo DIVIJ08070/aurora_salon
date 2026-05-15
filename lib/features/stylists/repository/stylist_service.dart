@@ -12,7 +12,7 @@ class StylistService {
   Future<List<StylistModel>> fetchStylists({String? specialisation}) async {
     try {
       final token = await _storageService.getAccessToken();
-      
+
       String endpoint = ApiEndpoints.stylists;
       if (specialisation != null) {
         endpoint += '?specialisation=$specialisation';
@@ -23,13 +23,10 @@ class StylistService {
         token: token,
       );
 
-      debugPrint('FetchStylists Status: ${response.statusCode}');
-      debugPrint('FetchStylists Body: ${response.body}');
-
       if (response.statusCode == 200) {
         final decodedBody = jsonDecode(response.body);
         final globalData = decodedBody['data'];
-        
+
         List stylistsList;
         if (globalData is Map && globalData.containsKey('data')) {
            stylistsList = globalData['data'] as List;
@@ -46,7 +43,7 @@ class StylistService {
 
       return [];
     } catch (e) {
-      debugPrint('Unexpected error fetching stylists: $e');
+
       return [];
     }
   }

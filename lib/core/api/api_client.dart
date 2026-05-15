@@ -1,17 +1,15 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class ApiClient {
-  // Use 10.0.2.2 for Android Emulator, localhost for iOS/Web/Desktop
+
   String get baseUrl {
-        if (Platform.isAndroid) {
-      return 'http://10.0.2.2:3000/v1';
-    } else {
-      return 'http://localhost:3000/v1';
-    }
-    // 127.0.0.1 works with 'adb reverse' over USB
-    // return 'http://192.168.29.186:3000/v1';
+      //     if (Platform.isAndroid) {
+    //   return 'http://10.0.2.2:3000/v1';
+    // } else {
+    //   return 'http://192.168.29.186:3000/v1';
+    // }
+    return 'http://192.168.29.186:3000/v1';
   }
 
   Future<http.Response> post(

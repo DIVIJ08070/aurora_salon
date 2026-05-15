@@ -44,7 +44,7 @@ class HomeHeader extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 24),
-        // Search Bar
+
         Row(
           children: [
             Expanded(

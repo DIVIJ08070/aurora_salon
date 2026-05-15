@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../viewmodel/booking_controller.dart';
-import '../../model/customer_model.dart';
 
 class CustomerSelectionStep extends StatelessWidget {
   final VoidCallback onNext;
@@ -40,7 +39,6 @@ class CustomerSelectionStep extends StatelessWidget {
         ),
         const SizedBox(height: 24),
 
-        // Search Bar (Optional UI Polish)
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: TextField(

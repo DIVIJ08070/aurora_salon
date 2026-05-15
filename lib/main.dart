@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'features/splashscreen/view/splash_screen.dart';
+
 import 'features/theme/theme_controller.dart';
 import 'routes/app_pages.dart';
 

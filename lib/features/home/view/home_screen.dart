@@ -8,11 +8,10 @@ import '../../stylists/viewmodel/stylist_controller.dart';
 import '../../booking/view/appointments_tab.dart';
 import '../viewmodel/home_controller.dart';
 import 'widgets/artist_section.dart';
-import 'widgets/home_header.dart';
 import 'widgets/profile_tab.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   static const _bg = Color(0xFF0D0D0D);
   static const _gold = Color(0xFFC5A059);
@@ -86,20 +85,28 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: Obx(() => BottomNavigationBar(
-            backgroundColor: _bg,
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: _gold,
-            unselectedItemColor: Colors.white38,
-            currentIndex: homeController.currentIndex.value,
-            onTap: (index) => homeController.changeTab(index),
-            items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: ''),
-              BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: ''),
-              BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: ''),
-              BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: ''),
-              BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: ''),
-            ],
+      bottomNavigationBar: Obx(() => Theme(
+            data: Theme.of(context).copyWith( 
+              splashFactory: NoSplash.splashFactory,
+              highlightColor: Colors.transparent,
+            ),
+            child: BottomNavigationBar(
+              backgroundColor: _bg,
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: _gold,
+              unselectedItemColor: Colors.white38,
+              currentIndex: homeController.currentIndex.value,
+              onTap: (index) => homeController.changeTab(index),
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              items: const [
+                BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: ''),
+                BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: ''),
+                BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: ''),
+                BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: ''),
+                BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: ''),
+              ],
+            ),
           )),
     );
   }
@@ -110,10 +117,10 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ZOMATO STYLE HERO SECTION
+
           Stack(
             children: [
-              // Background Banner Carousel
+
               SizedBox(
                 height: 420,
                 child: PageView(
@@ -125,13 +132,13 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              // Top UI Overlay
+
               SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children: [
-                      // 1. Header: Location & Profile
+
                       Row(
                         children: [
                           const Icon(Icons.location_on, color: Colors.white, size: 24),
@@ -166,7 +173,7 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      // 2. Search & "ARORA" Branding
+
                       Row(
                         children: [
                           Expanded(
@@ -202,7 +209,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              // 4. Page Indicator
+
               Positioned(
                 bottom: 20,
                 left: 0,
@@ -218,7 +225,6 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
 
-          // DASHBOARD CONTENT
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
             child: Column(
@@ -409,4 +415,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-

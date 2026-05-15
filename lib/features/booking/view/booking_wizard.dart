@@ -7,15 +7,6 @@ import 'steps/stylist_selection_step.dart';
 import 'steps/date_time_selection_step.dart';
 import 'steps/confirmation_step.dart';
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../viewmodel/booking_controller.dart';
-import 'steps/customer_selection_step.dart';
-import 'steps/service_selection_step.dart';
-import 'steps/stylist_selection_step.dart';
-import 'steps/date_time_selection_step.dart';
-import 'steps/confirmation_step.dart';
-
 class BookingWizard extends StatelessWidget {
   const BookingWizard({Key? key}) : super(key: key);
 
@@ -31,7 +22,7 @@ class BookingWizard extends StatelessWidget {
       backgroundColor: _charcoal,
       body: Stack(
         children: [
-          // Background Gradient
+
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -102,7 +93,7 @@ class BookingWizard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 48), // Spacer for balance
+          const SizedBox(width: 48),
         ],
       ),
     );
@@ -166,4 +157,3 @@ class BookingWizard extends StatelessWidget {
     );
   }
 }
-

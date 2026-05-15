@@ -9,7 +9,6 @@ class ConfirmationStep extends StatelessWidget {
   const ConfirmationStep({Key? key, required this.onBack}) : super(key: key);
 
   static const _gold = Color(0xFFC5A059);
-  static const _card = Color(0xFF1C1C1C);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class ConfirmationStep extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        
+
         Expanded(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -79,7 +78,7 @@ class ConfirmationStep extends StatelessWidget {
             ),
           ),
         ),
-        
+
         _buildBottomButtons(controller),
       ],
     );

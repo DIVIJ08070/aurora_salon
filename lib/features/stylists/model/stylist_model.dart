@@ -6,7 +6,7 @@ class StylistModel {
   final String shiftStart;
   final String shiftEnd;
   final String stylistStatus;
-  final String? imageUrl; // Added back for image support
+  final String? imageUrl;
 
   StylistModel({
     required this.id,

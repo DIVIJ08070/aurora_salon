@@ -11,7 +11,7 @@ class SplashScreen extends StatelessWidget {
     if (!Get.isRegistered<LoginVC>()) {
       Get.put(LoginVC(), permanent: true);
     }
-    
+
     final controller = Get.put(SplashController());
 
     return Scaffold(
@@ -95,4 +95,3 @@ class SplashScreen extends StatelessWidget {
     );
   }
 }
-

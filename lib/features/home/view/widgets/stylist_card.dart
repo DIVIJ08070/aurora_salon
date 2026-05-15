@@ -41,7 +41,7 @@ class StylistCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 16),
-          // Large Circular Avatar
+
           Container(
             width: 80,
             height: 80,
@@ -55,7 +55,7 @@ class StylistCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          // Name - Bold and crisp
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Text(
@@ -72,7 +72,7 @@ class StylistCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          // Role/Specialty - Soft gold
+
           Text(
             role,
             style: TextStyle(
@@ -83,14 +83,14 @@ class StylistCard extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const Spacer(),
-          // Bottom Row: Exp and Rating - Just like the reference
+
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${exp} exp', // Matches "6 yrs exp"
+                  '${exp} exp',
                   style: const TextStyle(
                     color: _subtext,
                     fontSize: 11,
