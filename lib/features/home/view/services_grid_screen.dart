@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../services/viewmodel/service_controller.dart';
+import '../../services/view/service_detail_screen.dart';
 import '../viewmodel/home_controller.dart';
 
 class ServicesGridScreen extends StatelessWidget {
@@ -60,49 +61,58 @@ class ServicesGridScreen extends StatelessWidget {
             return Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: () {
-                  homeController.selectCategory(service.name);
-                  Get.back();
-                },
+                onTap: () => Get.to(
+                  () => ServiceDetailScreen(
+                    service: service,
+                    imagePath: getRotatingImage(index),
+                  ),
+                  transition: Transition.rightToLeftWithFade,
+                ),
                 borderRadius: BorderRadius.circular(24),
                 splashColor: _gold.withValues(alpha: 0.2),
                 highlightColor: _gold.withValues(alpha: 0.1),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: isSelected ? _gold : Colors.white.withValues(alpha: 0.05),
-                      width: isSelected ? 2 : 1,
-                    ),
-                    image: DecorationImage(
-                      image: AssetImage(getRotatingImage(index)),
-                      fit: BoxFit.cover,
-                      opacity: isSelected ? 0.7 : 0.3,
-                    ),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.8),
-                        ],
+                child: Hero(
+                  tag: 'service_img_${service.id}',
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                          color: isSelected ? _gold : Colors.white.withValues(alpha: 0.05),
+                          width: isSelected ? 2 : 1,
+                        ),
+                        image: DecorationImage(
+                          image: AssetImage(getRotatingImage(index)),
+                          fit: BoxFit.cover,
+                          opacity: isSelected ? 0.7 : 0.3,
+                        ),
                       ),
-                    ),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Text(
-                          service.name.toUpperCase(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.white70,
-                            fontWeight: isSelected ? FontWeight.w900 : FontWeight.bold,
-                            fontSize: 14,
-                            letterSpacing: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withValues(alpha: 0.8),
+                            ],
+                          ),
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Text(
+                              service.name.toUpperCase(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: isSelected ? Colors.white : Colors.white70,
+                                fontWeight: isSelected ? FontWeight.w900 : FontWeight.bold,
+                                fontSize: 14,
+                                letterSpacing: 1,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -117,3 +127,4 @@ class ServicesGridScreen extends StatelessWidget {
     );
   }
 }
+

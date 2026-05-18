@@ -6,6 +6,8 @@ class StylistCard extends StatelessWidget {
   final String role;
   final String exp;
   final double rating;
+  final VoidCallback? onTap;
+  final String? heroTag;
 
   static const _card = Color.fromARGB(255, 12, 12, 12);
   static const _gold = Color(0xFFC5A059);
@@ -19,10 +21,32 @@ class StylistCard extends StatelessWidget {
     required this.role,
     required this.exp,
     required this.rating,
+    this.onTap,
+    this.heroTag,
   });
 
   @override
   Widget build(BuildContext context) {
+    Widget imageWidget = Container(
+      width: 80,
+      height: 80,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: _gold.withValues(alpha: 0.3), width: 1.5),
+        image: DecorationImage(
+          image: AssetImage(image),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+
+    if (heroTag != null) {
+      imageWidget = Hero(
+        tag: heroTag!,
+        child: imageWidget,
+      );
+    }
+
     return Container(
       width: 160,
       margin: const EdgeInsets.only(bottom: 8),
@@ -37,85 +61,80 @@ class StylistCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(height: 16),
-
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: _gold.withValues(alpha: 0.3), width: 1.5),
-              image: DecorationImage(
-                image: AssetImage(image),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Text(
-              name,
-              style: const TextStyle(
-                color: _text,
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.2,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(height: 4),
-
-          Text(
-            role,
-            style: TextStyle(
-              color: _gold.withValues(alpha: 0.85),
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const Spacer(),
-
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '$exp exp',
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(24),
+          splashColor: _gold.withValues(alpha: 0.1),
+          highlightColor: _gold.withValues(alpha: 0.05),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 16),
+              imageWidget,
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text(
+                  name,
                   style: const TextStyle(
-                    color: _subtext,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
+                    color: _text,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.2,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                 ),
-                Row(
+              ),
+              const SizedBox(height: 4),
+              Text(
+                role,
+                style: TextStyle(
+                  color: _gold.withValues(alpha: 0.85),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.star_rounded, color: _gold, size: 16),
-                    const SizedBox(width: 2),
                     Text(
-                      rating.toStringAsFixed(1),
+                      '$exp exp',
                       style: const TextStyle(
-                        color: _text,
+                        color: _subtext,
                         fontSize: 11,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
+                    ),
+                    Row(
+                      children: [
+                        const Icon(Icons.star_rounded, color: _gold, size: 16),
+                        const SizedBox(width: 2),
+                        Text(
+                          rating.toStringAsFixed(1),
+                          style: const TextStyle(
+                            color: _text,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 }
+

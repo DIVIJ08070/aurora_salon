@@ -75,11 +75,11 @@ class LoginVC extends GetxController {
         if (profile != null) {
           user.value = profile;
           isLoggedIn.value = true;
-          
+
           // Save updated profile to prefs
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('userData', jsonEncode(profile.toJson()));
-          
+
           Get.offAllNamed(Routes.home);
           return;
         }
@@ -103,7 +103,7 @@ class LoginVC extends GetxController {
         Get.offAllNamed(Routes.home);
       } else {
         // Only clear if refresh explicitly fails (e.g. invalid refresh token)
-        // If it's a connection error, we might want to keep the tokens, 
+        // If it's a connection error, we might want to keep the tokens,
         // but for now let's stick to the secure path of logging out if refresh fails.
         await _storageService.clearTokens();
         isLoggedIn.value = false;
@@ -203,7 +203,6 @@ class LoginVC extends GetxController {
     if (isLoading.value) return;
     isLoading.value = true;
     try {
-
       await _authService.logout();
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', false);
@@ -221,7 +220,6 @@ class LoginVC extends GetxController {
     if (isLoading.value) return;
     isLoading.value = true;
     try {
-
       await _authService.logout();
       await _storageService.clearTokens();
       final prefs = await SharedPreferences.getInstance();

@@ -5,12 +5,12 @@ import 'package:http/http.dart' as http;
 class ApiClient {
 
   String get baseUrl {
-    if (Platform.isAndroid) {
-      return 'http://10.0.2.2:3000/v1';
-    }
-    return 'http://localhost:3000/v1';
+    // if (Platform.isAndroid) {
+    //   return 'http://10.0.2.2:3000/v1';
+    // }
+    // return 'http://localhost:3000/v1';
     // For real physical devices on the same Wi-Fi, use:
-    // return 'http://192.168.29.186:3000/v1';
+    return 'http://192.168.29.186:3000/v1';
     // For deployed production/staging backend:
     // return 'https://surat-salon.onrender.com/v1';
   }
