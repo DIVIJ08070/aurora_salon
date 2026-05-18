@@ -8,13 +8,15 @@ import '../../booking/view/appointments_tab.dart';
 import '../viewmodel/home_controller.dart';
 import 'widgets/artist_section.dart';
 import 'widgets/profile_tab.dart';
+import 'widgets/home_hero_section.dart';
+import 'widgets/home_service_section.dart';
+import 'widgets/nearby_salons_section.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   static const _bg = Color(0xFF0D0D0D);
   static const _gold = Color(0xFFC5A059);
-  static const _text = Colors.white;
 
   String _getStylistImage(int index) {
     final images = [
@@ -22,7 +24,7 @@ class HomeScreen extends StatelessWidget {
       'assets/stylist2.png',
       'assets/stylist3.png',
       'assets/stylist4.png',
-      'assets/stylist5.png'
+      'assets/stylist5.png',
     ];
     return images[index % images.length];
   }
@@ -34,7 +36,7 @@ class HomeScreen extends StatelessWidget {
       'assets/cat_nails.png',
       'assets/cat_makeup.png',
       'assets/cat_skin.png',
-      'assets/cat_spa.png'
+      'assets/cat_spa.png',
     ];
     return images[index % images.length];
   }
@@ -55,21 +57,33 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: _bg,
       body: SafeArea(
         top: false,
-        child: Obx(() => IndexedStack(
-              index: homeController.currentIndex.value,
-              children: [
-                _buildHomeDashboard(
-                    name, serviceController, stylistController, homeController),
-                const AppointmentsTab(),
-                const Center(
-                    child: Text('Favorites coming soon',
-                        style: TextStyle(color: Colors.white54))),
-                const Center(
-                    child: Text('Messages coming soon',
-                        style: TextStyle(color: Colors.white54))),
-                ProfileTab(loginController: loginController),
-              ],
-            )),
+        child: Obx(
+          () => IndexedStack(
+            index: homeController.currentIndex.value,
+            children: [
+              _buildHomeDashboard(
+                name,
+                serviceController,
+                stylistController,
+                homeController,
+              ),
+              const AppointmentsTab(),
+              const Center(
+                child: Text(
+                  'Favorites coming soon',
+                  style: TextStyle(color: Colors.white54),
+                ),
+              ),
+              const Center(
+                child: Text(
+                  'Messages coming soon',
+                  style: TextStyle(color: Colors.white54),
+                ),
+              ),
+              ProfileTab(loginController: loginController),
+            ],
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Get.toNamed(Routes.booking),
@@ -84,333 +98,79 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: Obx(() => Theme(
-            data: Theme.of(context).copyWith( 
-              splashFactory: NoSplash.splashFactory,
-              highlightColor: Colors.transparent,
-            ),
-            child: BottomNavigationBar(
-              backgroundColor: _bg,
-              type: BottomNavigationBarType.fixed,
-              selectedItemColor: _gold,
-              unselectedItemColor: Colors.white38,
-              currentIndex: homeController.currentIndex.value,
-              onTap: (index) => homeController.changeTab(index),
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              items: const [
-                BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: ''),
-                BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: ''),
-                BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: ''),
-                BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: ''),
-                BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: ''),
-              ],
-            ),
-          )),
+      bottomNavigationBar: Obx(
+        () => Theme(
+          data: Theme.of(context).copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          child: BottomNavigationBar(
+            backgroundColor: _bg,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: _gold,
+            unselectedItemColor: Colors.white38,
+            currentIndex: homeController.currentIndex.value,
+            onTap: (index) => homeController.changeTab(index),
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: ''),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.calendar_today),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite_border),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.chat_bubble_outline),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline),
+                label: '',
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  Widget _buildHomeDashboard(String name, ServiceController serviceController,
-      StylistController stylistController, HomeController homeController) {
+  Widget _buildHomeDashboard(
+    String name,
+    ServiceController serviceController,
+    StylistController stylistController,
+    HomeController homeController,
+  ) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          Stack(
-            children: [
-
-              SizedBox(
-                height: 420,
-                child: PageView(
-                  controller: homeController.pageController,
-                  onPageChanged: (index) => homeController.onPageChanged(index),
-                  children: [
-                    _buildHeroBackground('assets/banner.png'),
-                    _buildHeroBackground('assets/banner2.png'),
-                  ],
-                ),
-              ),
-
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-
-                      Row(
-                        children: [
-                          const Icon(Icons.location_on, color: Colors.white, size: 24),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: const [
-                                    Text('Arora Luxe',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold)),
-                                    Icon(Icons.keyboard_arrow_down,
-                                        color: Colors.white, size: 20),
-                                  ],
-                                ),
-                                const Text(
-                                    'Bhulka Bhavan, Anand Mahal Rd, Honey...',
-                                    style:
-                                        TextStyle(color: Colors.white70, fontSize: 11),
-                                    overflow: TextOverflow.ellipsis),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          _buildCircleIcon(Icons.account_balance_wallet_rounded),
-                          const SizedBox(width: 8),
-                          _buildProfilePic(),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildZomatoSearchBar(),
-                          ),
-                          const SizedBox(width: 16),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: const [
-                              Text(
-                                'ARORA',
-                                style: TextStyle(
-                                  color: _gold,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 2,
-                                ),
-                              ),
-                              Text(
-                                'LUXE',
-                                style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 8,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              Positioned(
-                bottom: 20,
-                left: 0,
-                right: 0,
-                child: Obx(() => Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                          homeController.numPages,
-                          (index) =>
-                              _buildIndicator(index, homeController.currentPage.value)),
-                    )),
-              ),
-            ],
-          ),
-
+          HomeHeroSection(homeController: homeController, userName: name),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Services',
-                    style: TextStyle(
-                        color: _text, fontSize: 18, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 16),
-                _buildServiceList(serviceController, homeController),
+                HomeServiceSection(
+                  serviceController: serviceController,
+                  homeController: homeController,
+                  getRotatingImage: _getRotatingImage,
+                ),
                 const SizedBox(height: 32),
                 ArtistSection(
-                    stylistController: stylistController,
-                    getStylistImage: _getStylistImage),
+                  stylistController: stylistController,
+                  getStylistImage: _getStylistImage,
+                ),
                 const SizedBox(height: 32),
-                _buildNearbySalons(),
+                const NearbySalonsSection(),
               ],
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildHeroBackground(String image) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.black.withValues(alpha: 0.6),
-              Colors.transparent,
-              Colors.black.withValues(alpha: 0.8)
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildZomatoSearchBar() {
-    return Container(
-      height: 50,
-      decoration: BoxDecoration(
-          color: const Color(0xFF1C1C1C), borderRadius: BorderRadius.circular(12)),
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Row(
-        children: const [
-          Icon(Icons.search, color: _gold, size: 22),
-          SizedBox(width: 10),
-          Expanded(
-              child: Text('Search "Haircuts"',
-                  style: TextStyle(color: Colors.white38, fontSize: 14))),
-          Icon(Icons.mic_none_rounded, color: Colors.white54, size: 22),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildIndicator(int index, int currentPage) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      width: currentPage == index ? 16 : 8,
-      height: 4,
-      decoration: BoxDecoration(
-          color: currentPage == index ? Colors.white : Colors.white24,
-          borderRadius: BorderRadius.circular(2)),
-    );
-  }
-
-  Widget _buildCircleIcon(IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration:
-          BoxDecoration(color: Colors.white.withValues(alpha: 0.1), shape: BoxShape.circle),
-      child: Icon(icon, color: Colors.white, size: 20),
-    );
-  }
-
-  Widget _buildProfilePic() {
-    return Container(
-      decoration: BoxDecoration(
-          shape: BoxShape.circle, border: Border.all(color: Colors.white24, width: 2)),
-      child: const CircleAvatar(
-          radius: 18, backgroundImage: AssetImage('assets/stylist1.png')),
-    );
-  }
-
-  Widget _buildServiceList(
-      ServiceController serviceController, HomeController homeController) {
-    return SizedBox(
-      height: 110,
-      child: Obx(() {
-        if (serviceController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator(color: _gold));
-        }
-        return ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: serviceController.services.length,
-          itemBuilder: (context, index) {
-            final service = serviceController.services[index];
-            final isSelected = service.name == homeController.selectedCategory.value;
-            return GestureDetector(
-              onTap: () => homeController.selectCategory(service.name),
-              child: Container(
-                width: 140,
-                margin: const EdgeInsets.only(right: 12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                      color: isSelected ? _gold : Colors.transparent, width: 2),
-                  image: DecorationImage(
-                      image: AssetImage(_getRotatingImage(index)),
-                      fit: BoxFit.cover,
-                      opacity: isSelected ? 0.8 : 0.4),
-                ),
-                child: Center(
-                  child: Text(service.name.toUpperCase(),
-                      style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.white60,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12)),
-                ),
-              ),
-            );
-          },
-        );
-      }),
-    );
-  }
-
-  Widget _buildNearbySalons() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Text('Nearby Salons',
-                style: TextStyle(color: _text, fontSize: 18, fontWeight: FontWeight.bold)),
-            Text('See all', style: TextStyle(color: _gold, fontSize: 14)),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Container(
-          height: 200,
-          width: double.infinity,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              image: const DecorationImage(
-                  image: AssetImage('assets/salon_interior.png'), fit: BoxFit.cover)),
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [Colors.black.withValues(alpha: 0.9), Colors.transparent])),
-            padding: const EdgeInsets.all(20),
-            alignment: Alignment.bottomLeft,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('The Gilded Blade',
-                    style: TextStyle(
-                        color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 4),
-                Row(
-                  children: const [
-                    Icon(Icons.location_on, color: _gold, size: 14),
-                    SizedBox(width: 4),
-                    Text('1.2 km away',
-                        style: TextStyle(color: Colors.white70, fontSize: 12)),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

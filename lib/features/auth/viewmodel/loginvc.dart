@@ -61,19 +61,34 @@ class LoginVC extends GetxController {
 
   Future<void> checkLogin() async {
     try {
-
       final hasTokens = await _storageService.hasTokens();
       if (!hasTokens) {
-
         isLoggedIn.value = false;
         Get.offAllNamed(Routes.login);
         return;
       }
 
+      // Try to get existing token
+      final token = await _storageService.getAccessToken();
+      if (token != null) {
+        final profile = await _authService.fetchProfile(token);
+        if (profile != null) {
+          user.value = profile;
+          isLoggedIn.value = true;
+          
+          // Save updated profile to prefs
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('userData', jsonEncode(profile.toJson()));
+          
+          Get.offAllNamed(Routes.home);
+          return;
+        }
+      }
+
+      // If profile fetch fails, try to refresh
       final refreshSuccess = await _authService.refreshTokens();
 
       if (refreshSuccess) {
-
         final prefs = await SharedPreferences.getInstance();
         isLoggedIn.value = true;
 
@@ -81,25 +96,22 @@ class LoginVC extends GetxController {
         if (userJson != null) {
           try {
             user.value = Userdata.fromJson(jsonDecode(userJson));
-
           } catch (e) {
             debugPrint('Error parsing user data: $e');
           }
         }
-
         Get.offAllNamed(Routes.home);
       } else {
-
+        // Only clear if refresh explicitly fails (e.g. invalid refresh token)
+        // If it's a connection error, we might want to keep the tokens, 
+        // but for now let's stick to the secure path of logging out if refresh fails.
         await _storageService.clearTokens();
         isLoggedIn.value = false;
         Get.offAllNamed(Routes.login);
       }
     } catch (e) {
-
-      errorMessage.value = e.toString();
+      debugPrint('CheckLogin Error: $e');
       Get.offAllNamed(Routes.login);
-    } finally {
-
     }
   }
 
